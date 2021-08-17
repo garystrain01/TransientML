@@ -13,7 +13,7 @@ warnings.simplefilter('ignore')
 import statsmodels.api as sm #  the stats module which contains state space modelling
 
 bDebug = False     #  switch debug code on/off
-bGenerateCSVFiles = True # to re-generate individual transient CSV files
+bGenerateCSVFiles = False # to re-generate individual transient CSV files
 bDisplayLightCurveSizing = False # used to display number of points per light curve (for reference only)
 bDisplayLightCurvePoints = False # for display of test lightcurves
 bRandom = False # generate random lightcurves for comparison
@@ -30,15 +30,18 @@ REF_LIGHTCURVE_LABELS = 'lightcurveLabels.txt'
 RANDOM_DATA_FILENAME = 'Random.txt'
 DEFAULT_CLASS_NAME = 'Classification'
 DEFAULT_TRANSIENTID_NAME = 'TransientID'
-
+MJD_TO_JD_OFFSET = 2400000.5
 # Defaults for CNN Model
 
 DEFAULT_VERBOSE_LEVEL = 2
 DEFAULT_BATCH_SIZE = 32
 DEFAULT_KERNEL_SIZE = 3
 
-DEFAULT_AGN_LABEL = 0
-DEFAULT_CV_LABEL = 1
+DEFAULT_LABEL1 = 0
+DEFAULT_LABEL2 = 1
+
+BINARY_CLASS1 = 'AGN'
+BINARY_CLASS2 = 'CV'
 
 TRAIN_TEST_RATIO = 0.70  # 70% of the total data should be training
 
@@ -108,7 +111,7 @@ def GenerateRandomTrainingSet(numberTrainingCurves,numberSampleTimes,maxAmplitud
 
 def ConvertToJulianDay(MJD):
 
-    julianDay = MJD+2400000.5
+    julianDay = MJD+MJD_TO_JD_OFFSET
 
     return julianDay
 
@@ -532,10 +535,10 @@ if (bGenerateCSVFiles):
 
 
 # now process each a CSV file to create a training and test set of data
-sys.exit()
 
-trainingDataSet1, maxTimeDelta1,maxAmplitude = ProcessClass("AGN")
-trainingDataSet2, maxTimeDelta2, maxAmplitude = ProcessClass("CV")
+
+trainingDataSet1, maxTimeDelta1,maxAmplitude = ProcessClass(BINARY_CLASS1)
+trainingDataSet2, maxTimeDelta2, maxAmplitude = ProcessClass(BINARY_CLASS2)
 
 if (maxTimeDelta1 > maxTimeDelta2):
     maxTimeDelta = maxTimeDelta1
@@ -588,11 +591,11 @@ if (bDebug):
 numberInTrainSet1 = int(round(XData1.shape[0]*TRAIN_TEST_RATIO))
 numberInTrainSet2 = int(round(XData2.shape[0]*TRAIN_TEST_RATIO))
 
-train1_y = createLabelSet(DEFAULT_AGN_LABEL,numberInTrainSet1,1)
-test1_y = createLabelSet(DEFAULT_AGN_LABEL,(numberTrainingCurves1-numberInTrainSet1),1)
+train1_y = createLabelSet(DEFAULT_LABEL1,numberInTrainSet1,1)
+test1_y = createLabelSet(DEFAULT_LABEL1,(numberTrainingCurves1-numberInTrainSet1),1)
 
-train2_y = createLabelSet(DEFAULT_CV_LABEL,numberInTrainSet2,1)
-test2_y = createLabelSet(DEFAULT_CV_LABEL,(numberTrainingCurves2-numberInTrainSet2),1)
+train2_y = createLabelSet(DEFAULT_LABEL2,numberInTrainSet2,1)
+test2_y = createLabelSet(DEFAULT_LABEL2,(numberTrainingCurves2-numberInTrainSet2),1)
 
 
 complete_ytrain = np.concatenate((train1_y,train2_y))
