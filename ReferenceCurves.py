@@ -38,6 +38,7 @@ MJD_TO_JD_OFFSET = 2400000.5
 DEFAULT_VERBOSE_LEVEL = 2
 DEFAULT_BATCH_SIZE = 32
 DEFAULT_KERNEL_SIZE = 3
+DEFAULT_NO_EPOCHS = 10
 
 DEFAULT_LABEL1 = 0
 DEFAULT_LABEL2 = 1
@@ -236,7 +237,7 @@ def StoreInCSVFile(transientID,transientClassName,obsID,magnitude,magnitudeError
     else:
         print("*** Error - No CSV File For This Transient Class ***")
 
-def StoreAllObservations(lightCurves):
+def StoreAllObservations(transientIDDict,lightCurves):
     # for each lightcurve, store the set of observations for a specific transient type in
     # the correct CSV file
 
@@ -254,7 +255,7 @@ def StoreAllObservations(lightCurves):
         # for each observation, store in relevant CSV file
 
         transientID[obs] = int(transientID[obs].replace('TranID',''))
-        transientClassName = TransientIDDict[transientID[obs]]
+        transientClassName = transientIDDict[transientID[obs]]
 
         StoreInCSVFile(transientID[obs],transientClassName,obsID[obs],Mag[obs],Magerr[obs],MJD[obs])
         iCount += 1
@@ -570,7 +571,6 @@ def StandardLightCurves(setNumber,trainingDataSet,thisMaxTimeDelta,maxTimeDelta)
         print("Standardising Set Number ", setNumber)
     for curve in range(len(trainingDataSet)):
         standardTrainingData = StandardiseDataSet(trainingDataSet[curve],thisMaxTimeDelta,maxTimeDelta)
- #       print(standardTrainingData)
         finalTrainingSet.append(standardTrainingData)
 
     return finalTrainingSet
@@ -590,7 +590,7 @@ def main():
 
         CreateAllTransientFiles(ClassificationDict)
 
-        StoreAllObservations(lightCurves)
+        StoreAllObservations(TransientIDDict,lightCurves)
 
         CloseAllCSVFiles()
 
@@ -654,9 +654,6 @@ def main():
         print("complete test light curves = ",len(completeXtest))
 
 
-#    numberInTrainSet1 = int(round(XData1.shape[0]*TRAIN_TEST_RATIO))
-#    numberInTrainSet2 = int(round(XData2.shape[0]*TRAIN_TEST_RATIO))
-
     train1_y = createLabelSet(DEFAULT_LABEL1,numberInTrainSet1,1)
     test1_y = createLabelSet(DEFAULT_LABEL1,(numberTrainingCurves1-numberInTrainSet1),1)
 
@@ -712,7 +709,7 @@ def main():
     if (bDebug):
         print(n_timesteps,n_features,n_outputs)
 
-    Accuracy, CNNModel = evaluateCNNModel(Xtrain,ytrain,Xtest,ytest,n_timesteps,n_features,n_outputs,10)
+    Accuracy, CNNModel = evaluateCNNModel(Xtrain,ytrain,Xtest,ytest,n_timesteps,n_features,n_outputs,DEFAULT_NO_EPOCHS)
     print("CNN Accuracy = ",Accuracy)
 
 if __name__== '__main__':
