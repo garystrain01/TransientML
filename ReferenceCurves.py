@@ -576,145 +576,145 @@ def StandardLightCurves(setNumber,trainingDataSet,thisMaxTimeDelta,maxTimeDelta)
     return finalTrainingSet
 
 
-##################
+def main():
 
-lightCurves = load_file(REF_LIGHTCURVE_LOCATION+REF_LIGHTCURVE_FILENAME)
+    lightCurves = load_file(REF_LIGHTCURVE_LOCATION+REF_LIGHTCURVE_FILENAME)
 
-if (bGenerateCSVFiles):
+    if (bGenerateCSVFiles):
 
-    print("Generating Individual CSV Files For Transients...")
+        print("Generating Individual CSV Files For Transients...")
 
-    ClassificationDict, TransientIDDict = ProcessTransientClasses()
-    if (bDisplayTransientClasses):
-        DisplayTransientNames(ClassificationDict)
+        ClassificationDict, TransientIDDict = ProcessTransientClasses()
+        if (bDisplayTransientClasses):
+            DisplayTransientNames(ClassificationDict)
 
-    CreateAllTransientFiles(ClassificationDict)
+        CreateAllTransientFiles(ClassificationDict)
 
-    StoreAllObservations(lightCurves)
+        StoreAllObservations(lightCurves)
 
-    CloseAllCSVFiles()
-
-
-# now process each a CSV file to create a training and test set of data
+        CloseAllCSVFiles()
 
 
-trainingDataSet1, maxTimeDelta1,maxAmplitude = ProcessClass(BINARY_CLASS1)
-trainingDataSet2, maxTimeDelta2, maxAmplitude = ProcessClass(BINARY_CLASS2)
-
-if (maxTimeDelta1 > maxTimeDelta2):
-    maxTimeDelta = maxTimeDelta1
-else:
-    maxTimeDelta = maxTimeDelta2
-
-numberTrainingCurves1 = len(trainingDataSet1)
-numberTrainingCurves2 = len(trainingDataSet2)
-
-finalTrainingSet1 = StandardLightCurves(1,trainingDataSet1,maxTimeDelta1,maxTimeDelta)
-finalTrainingSet2 = StandardLightCurves(2,trainingDataSet2,maxTimeDelta2,maxTimeDelta)
-
-times = np.arange(0,maxTimeDelta+1)
-
-if (bDisplayLightCurvePoints):
-    DisplaySelectionLightCurves(BINARY_CLASS1,1,times,finalTrainingSet1)
-    DisplaySelectionLightCurves(BINARY_CLASS2,2,times,finalTrainingSet2)
-
-# scale all data to be between 0-1
-
-XData1 = ScaleInputData(finalTrainingSet1)
-XData2 = ScaleInputData(finalTrainingSet2)
-
-print("Shape of Two Datasets ...")
-print(XData1.shape)
-print(XData2.shape)
-
-numberInTrainSet1 = int(round(XData1.shape[0]*TRAIN_TEST_RATIO))
-numberInTrainSet2 = int(round(XData2.shape[0]*TRAIN_TEST_RATIO))
-
-Xtrain1 = XData1[:numberInTrainSet1,:]
-Xtrain2 = XData2[:numberInTrainSet2,:]
-
-Xtest1 = XData1[numberInTrainSet1:,:]
-Xtest2 = XData2[numberInTrainSet2:,:]
-
-completeXtrain = np.concatenate((Xtrain1,Xtrain2))
-completeXtest = np.concatenate((Xtest1,Xtest2))
+    # now process each a CSV file to create a training and test set of data
 
 
-#now create the train label data
+    trainingDataSet1, maxTimeDelta1,maxAmplitude = ProcessClass(BINARY_CLASS1)
+    trainingDataSet2, maxTimeDelta2, maxAmplitude = ProcessClass(BINARY_CLASS2)
 
-if (bDebug):
-    print(" number transient1 training light curves = ",len(Xtrain1))
-    print(" number transient 2 training light curves = ",len(Xtrain2))
+    if (maxTimeDelta1 > maxTimeDelta2):
+        maxTimeDelta = maxTimeDelta1
+    else:
+        maxTimeDelta = maxTimeDelta2
 
-    print("complete training light curves = ",len(completeXtrain))
+    numberTrainingCurves1 = len(trainingDataSet1)
+    numberTrainingCurves2 = len(trainingDataSet2)
 
-    print(" number transient1 test light curves = ",len(Xtest1))
-    print(" number transient 2 test light curves = ",len(Xtest2))
+    finalTrainingSet1 = StandardLightCurves(1,trainingDataSet1,maxTimeDelta1,maxTimeDelta)
+    finalTrainingSet2 = StandardLightCurves(2,trainingDataSet2,maxTimeDelta2,maxTimeDelta)
 
-    print("complete test light curves = ",len(completeXtest))
+    times = np.arange(0,maxTimeDelta+1)
 
+    if (bDisplayLightCurvePoints):
+        DisplaySelectionLightCurves(BINARY_CLASS1,1,times,finalTrainingSet1)
+        DisplaySelectionLightCurves(BINARY_CLASS2,2,times,finalTrainingSet2)
 
-numberInTrainSet1 = int(round(XData1.shape[0]*TRAIN_TEST_RATIO))
-numberInTrainSet2 = int(round(XData2.shape[0]*TRAIN_TEST_RATIO))
+    # scale all data to be between 0-1
 
-train1_y = createLabelSet(DEFAULT_LABEL1,numberInTrainSet1,1)
-test1_y = createLabelSet(DEFAULT_LABEL1,(numberTrainingCurves1-numberInTrainSet1),1)
+    XData1 = ScaleInputData(finalTrainingSet1)
+    XData2 = ScaleInputData(finalTrainingSet2)
 
-train2_y = createLabelSet(DEFAULT_LABEL2,numberInTrainSet2,1)
-test2_y = createLabelSet(DEFAULT_LABEL2,(numberTrainingCurves2-numberInTrainSet2),1)
+    print("Shape of Two Datasets ...")
+    print(XData1.shape)
+    print(XData2.shape)
 
+    numberInTrainSet1 = int(round(XData1.shape[0]*TRAIN_TEST_RATIO))
+    numberInTrainSet2 = int(round(XData2.shape[0]*TRAIN_TEST_RATIO))
 
-complete_ytrain = np.concatenate((train1_y,train2_y))
-complete_ytest = np.concatenate((test1_y,test2_y))
+    Xtrain1 = XData1[:numberInTrainSet1,:]
+    Xtrain2 = XData2[:numberInTrainSet2,:]
 
+    Xtest1 = XData1[numberInTrainSet1:,:]
+    Xtest2 = XData2[numberInTrainSet2:,:]
 
-# create an integrated set of training data which includes the transient and the random data
-# ensure that the sequence numbers are kept to manage the label data
-#completeXtrain = np.concatenate((Xtrain1,Xtrain2))
-#completeXtest = np.concatenate((Xtest1,Xtest2))
-
-if (bDebug):
-    print("size of complete y train = ", len(complete_ytrain))
-    print("size of complete y test = ", len(complete_ytest))
-
-    print("size of complete x train = ", len(completeXtrain))
-    print("size of complete x test = ", len(completeXtest))
-
-
-index = np.random.choice(completeXtrain.shape[0],len(completeXtrain),replace=False)
-
-Xtrain = completeXtrain[index]
-ytrain = complete_ytrain[index]
-
-index = np.random.choice(completeXtest.shape[0],len(completeXtest),replace=False)
-
-Xtest = completeXtest[index]
-ytest = complete_ytest[index]
-
-if (bDebug):
-    print("Final Training Data = ",Xtrain.shape)
-    print("Final Test Data = ",Xtest.shape)
-
-    print("Final Training Label Data = ",ytrain.shape)
-    print("Final Test Label Data = ",ytest.shape)
+    completeXtrain = np.concatenate((Xtrain1,Xtrain2))
+    completeXtest = np.concatenate((Xtest1,Xtest2))
 
 
-Xtrain = np.reshape(Xtrain,(Xtrain.shape[0],Xtrain.shape[1],1))
-Xtest = np.reshape(Xtest,(Xtest.shape[0],Xtest.shape[1],1))
+    #now create the train label data
 
-if (bDebug):
-    print("shape of Xtrain =",Xtrain.shape)
-    print("shape of Xtest =",Xtest.shape)
-    print("shape of ytrain =",ytrain.shape)
-    print("shape of ytest =",ytest.shape)
+    if (bDebug):
+        print(" number transient1 training light curves = ",len(Xtrain1))
+        print(" number transient 2 training light curves = ",len(Xtrain2))
 
-n_timesteps = Xtrain.shape[1]
-n_features = Xtrain.shape[2]
-n_outputs = 1 # for binary classification
+        print("complete training light curves = ",len(completeXtrain))
 
-if (bDebug):
-    print(n_timesteps,n_features,n_outputs)
+        print(" number transient1 test light curves = ",len(Xtest1))
+        print(" number transient 2 test light curves = ",len(Xtest2))
 
-Accuracy, CNNModel = evaluateCNNModel(Xtrain,ytrain,Xtest,ytest,n_timesteps,n_features,n_outputs,10)
-print("CNN Accuracy = ",Accuracy)
+        print("complete test light curves = ",len(completeXtest))
+
+
+#    numberInTrainSet1 = int(round(XData1.shape[0]*TRAIN_TEST_RATIO))
+#    numberInTrainSet2 = int(round(XData2.shape[0]*TRAIN_TEST_RATIO))
+
+    train1_y = createLabelSet(DEFAULT_LABEL1,numberInTrainSet1,1)
+    test1_y = createLabelSet(DEFAULT_LABEL1,(numberTrainingCurves1-numberInTrainSet1),1)
+
+    train2_y = createLabelSet(DEFAULT_LABEL2,numberInTrainSet2,1)
+    test2_y = createLabelSet(DEFAULT_LABEL2,(numberTrainingCurves2-numberInTrainSet2),1)
+
+    complete_ytrain = np.concatenate((train1_y,train2_y))
+    complete_ytest = np.concatenate((test1_y,test2_y))
+
+
+    # create an integrated set of training data which includes the transient and the random data
+    # ensure that the sequence numbers are kept to manage the label data
+
+    if (bDebug):
+        print("size of complete y train = ", len(complete_ytrain))
+        print("size of complete y test = ", len(complete_ytest))
+
+        print("size of complete x train = ", len(completeXtrain))
+        print("size of complete x test = ", len(completeXtest))
+
+
+    index = np.random.choice(completeXtrain.shape[0],len(completeXtrain),replace=False)
+
+    Xtrain = completeXtrain[index]
+    ytrain = complete_ytrain[index]
+
+    index = np.random.choice(completeXtest.shape[0],len(completeXtest),replace=False)
+
+    Xtest = completeXtest[index]
+    ytest = complete_ytest[index]
+
+    if (bDebug):
+        print("Final Training Data = ",Xtrain.shape)
+        print("Final Test Data = ",Xtest.shape)
+
+        print("Final Training Label Data = ",ytrain.shape)
+        print("Final Test Label Data = ",ytest.shape)
+
+
+    Xtrain = np.reshape(Xtrain,(Xtrain.shape[0],Xtrain.shape[1],1))
+    Xtest = np.reshape(Xtest,(Xtest.shape[0],Xtest.shape[1],1))
+
+    if (bDebug):
+        print("shape of Xtrain =",Xtrain.shape)
+        print("shape of Xtest =",Xtest.shape)
+        print("shape of ytrain =",ytrain.shape)
+        print("shape of ytest =",ytest.shape)
+
+    n_timesteps = Xtrain.shape[1]
+    n_features = Xtrain.shape[2]
+    n_outputs = 1 # for binary classification
+
+    if (bDebug):
+        print(n_timesteps,n_features,n_outputs)
+
+    Accuracy, CNNModel = evaluateCNNModel(Xtrain,ytrain,Xtest,ytest,n_timesteps,n_features,n_outputs,10)
+    print("CNN Accuracy = ",Accuracy)
+
+if __name__== '__main__':
+    main()
 
