@@ -29,6 +29,8 @@ REF_LIGHTCURVE_FILENAME = 'transient_lc.txt'
 REF_LIGHTCURVE_LABELS = 'lightcurveLabels.txt'
 RANDOM_DATA_FILENAME = 'Random.txt'
 DEFAULT_CLASS_NAME = 'Classification'
+DEFAULT_TRAINING_CURVENAME = REF_LIGHTCURVE_CSV_LOCATION+'RefCurveSet_'
+DEFAULT_FILENAME_EXT = '.jpg'
 DEFAULT_TRANSIENTID_NAME = 'TransientID'
 MJD_TO_JD_OFFSET = 2400000.5
 # Defaults for CNN Model
@@ -40,10 +42,16 @@ DEFAULT_KERNEL_SIZE = 3
 DEFAULT_LABEL1 = 0
 DEFAULT_LABEL2 = 1
 
-BINARY_CLASS1 = 'AGN'
-BINARY_CLASS2 = 'CV'
+BINARY_CLASS1 = 'CV'
+BINARY_CLASS2 = 'Var'
 
 TRAIN_TEST_RATIO = 0.70  # 70% of the total data should be training
+
+SMALL_FONT_SIZE = 8
+MEDIUM_FONT_SIZE = 10
+BIGGER_FONT_SIZE = 12
+
+
 
 FileHandleDict = {}  #use for storing file handles for all generated CSV files
 
@@ -270,12 +278,40 @@ def DisplayLightCurveIndices(transientName,X,y):
 
     plt.show()
 
-def DisplayLightCurvePoints(transientName,lightCurveNumber,X,y):
+def DisplayLightCurvePoints(transientName,lightCurveNumber,times,y):
 
-    plt.plot(X,y)
+
+    plt.scatter(times, y, marker='+')
+
     strr = 'Lightcurve No '+str(lightCurveNumber)+'('+transientName+') '
     plt.title(strr)
     plt.show()
+
+def SetPlotParameters():
+
+    plt.rc('axes',labelsize=SMALL_FONT_SIZE)
+    plt.rc('xtick',labelsize=SMALL_FONT_SIZE)
+    plt.rc('ytick',labelsize=SMALL_FONT_SIZE)
+
+def DisplaySelectionLightCurves(transientName,setNumber,times,finalTrainingSet):
+
+
+    DEFAULT_DISPLAY_CURVES = 3
+    fig, axs = plt.subplots(DEFAULT_DISPLAY_CURVES)
+
+    for curve in range(0, DEFAULT_DISPLAY_CURVES):
+        randomCurveNo = int(random.random() * len(finalTrainingSet))
+        axs[curve].scatter(times, finalTrainingSet[randomCurveNo], marker='+')
+
+        axs[curve].tick_params(axis='x',labelsize=SMALL_FONT_SIZE)
+        axs[curve].set_xlabel('Days',fontsize=SMALL_FONT_SIZE)
+        axs[curve].set_ylabel('Mag')
+        strr = 'Lightcurve No '+str(randomCurveNo)+'('+transientName+') '
+
+    plt.show()
+
+    fig_filename = DEFAULT_TRAINING_CURVENAME + str(setNumber)+DEFAULT_FILENAME_EXT
+    fig.savefig(fig_filename)
 
 
 def CreateTransientTrainingData(transientName,TotalLightCurves):
@@ -283,7 +319,7 @@ def CreateTransientTrainingData(transientName,TotalLightCurves):
     # create a suitable np array
 
     numberObjects = len(TotalLightCurves)
-    strr = 'Processing '+str(numberObjects)+' of '+transientName
+    strr = 'Processing '+str(numberObjects)+' lightcurves of '+transientName
     print(strr)
 
     completeTrainingData = []
@@ -353,6 +389,20 @@ def CreateTransientTrainingData(transientName,TotalLightCurves):
 
     return completeTrainingData, round(maxTimeDelta), maxSize #this is a linked list of 2 lists of time series and mag series data
 
+def DisplayLightCurveEntries(trainingDataSet):
+    listOfData = []
+    listOfEntries = []
+
+    for entry in range(len(trainingDataSet)):
+        if (trainingDataSet[entry] != 0):
+            listOfEntries.append(entry)
+            listOfData.append(trainingDataSet[entry])
+
+    for entry in range(len(listOfEntries)):
+        strr = '('+str(listOfEntries[entry])+','+str(listOfData[entry])+')'
+        print(strr)
+
+
 def StandardiseDataSet(trainingData,maxTimeDelta,largestTimeDelta):
 
     # transform raw dataset into consistent length dataset and use interpolation for
@@ -384,11 +434,20 @@ def StandardiseDataSet(trainingData,maxTimeDelta,largestTimeDelta):
     # the magnitude time series
 
     for entry in range(len(timeSeriesData)):
+        if (bDebug):
+            print("entry = ",entry)
+            print("time value =",int(timeSeriesData[entry]))
+            print("mag value =",magSeriesData[entry])
 
         if (newTrainingSet[int(timeSeriesData[entry])] != 0):
             prevSeriesData = newTrainingSet[int(timeSeriesData[entry])]
             #now average out any duplicates
             newTrainingSet[int(timeSeriesData[entry])] = (magSeriesData[entry]+prevSeriesData)/2
+        else:
+           newTrainingSet[int(timeSeriesData[entry])] = magSeriesData[entry]
+
+    if (bDebug):
+        DisplayLightCurveEntries(newTrainingSet)
 
     return newTrainingSet
 
@@ -507,9 +566,11 @@ def StandardLightCurves(setNumber,trainingDataSet,thisMaxTimeDelta,maxTimeDelta)
     finalTrainingSet = []
 
     if (bDebug):
+        print("len of training set = ", len(trainingDataSet))
         print("Standardising Set Number ", setNumber)
     for curve in range(len(trainingDataSet)):
         standardTrainingData = StandardiseDataSet(trainingDataSet[curve],thisMaxTimeDelta,maxTimeDelta)
+ #       print(standardTrainingData)
         finalTrainingSet.append(standardTrainingData)
 
     return finalTrainingSet
@@ -553,6 +614,10 @@ finalTrainingSet2 = StandardLightCurves(2,trainingDataSet2,maxTimeDelta2,maxTime
 
 times = np.arange(0,maxTimeDelta+1)
 
+if (bDisplayLightCurvePoints):
+    DisplaySelectionLightCurves(BINARY_CLASS1,1,times,finalTrainingSet1)
+    DisplaySelectionLightCurves(BINARY_CLASS2,2,times,finalTrainingSet2)
+
 # scale all data to be between 0-1
 
 XData1 = ScaleInputData(finalTrainingSet1)
@@ -573,6 +638,7 @@ Xtest2 = XData2[numberInTrainSet2:,:]
 
 completeXtrain = np.concatenate((Xtrain1,Xtrain2))
 completeXtest = np.concatenate((Xtest1,Xtest2))
+
 
 #now create the train label data
 
@@ -604,8 +670,8 @@ complete_ytest = np.concatenate((test1_y,test2_y))
 
 # create an integrated set of training data which includes the transient and the random data
 # ensure that the sequence numbers are kept to manage the label data
-completeXtrain = np.concatenate((Xtrain1,Xtrain2))
-completeXtest = np.concatenate((Xtest1,Xtest2))
+#completeXtrain = np.concatenate((Xtrain1,Xtrain2))
+#completeXtest = np.concatenate((Xtest1,Xtest2))
 
 if (bDebug):
     print("size of complete y train = ", len(complete_ytrain))
