@@ -35,6 +35,9 @@ DEFAULT_OUTPUT_FITS_SEYFERT_FILENAME = DEFAULT_TEST_SOURCE_LOCATION+'SEYFERTS_FI
 DEFAULT_OUTPUT_FITS_QUASAR_FILENAME = DEFAULT_TEST_SOURCE_LOCATION+'QUASAR_FITS.png'
 DEFAULT_OUTPUT_FITS_PULSAR_FILENAME = DEFAULT_TEST_SOURCE_LOCATION+'PULSAR_FITS.png'
 DEFAULT_PULSARCOORDS_FILE = DEFAULT_PULSAR_SOURCE_LOCATION+'PulsarCoords.txt'
+DEFAULT_STACKED_FILENAME = DEFAULT_TEST_SOURCE_LOCATION+'StackedImages.png'
+DEFAULT_MODEL_FILE_LOCATION = DEFAULT_TEST_SOURCE_LOCATION
+MODEL_FILENAME_EXTENSION = '.pkl'
 
 # Offset data for processing PULSAR text files
 
@@ -50,6 +53,12 @@ UNDERSCORE = '_'
 DEFAULT_CSV_FILETYPE = UNDERSCORE+'data.txt'
 XSIZE_FITS_IMAGE= 120
 YSIZE_FITS_IMAGE = 120
+
+DEFAULT_NO_INDEPENDENT_TESTS = 10
+
+
+XSIZE_SMALL_FITS_IMAGE = 20
+YSIZE_SMALL_FITS_IMAGE = 20
 
 DEFAULT_AGN_CLASS = "AGN"
 DEFAULT_BLAZAR_CLASS = "BLAZAR"
@@ -119,6 +128,12 @@ bSaveImageFiles = False # save FITS files for presentations
 bTestRandomFiles= True # test individual (random) FITS files
 bDisplayProbs = False # display predicted probbilities
 bDisplayIndividualPredictions = True
+bStackImages = False # stack all source images
+bShrinkImages = False  # to experiment with smalleer FITS images
+bRandomSelectData = True # set false if you want to eliminate randomizing of training and test data
+bCollectRandomSamples = False # for extra tests of random samples
+bTestRestoredModel = False # use an existing model
+bSaveModel = True # save model for future use
 
 def evaluateCNNModel(Xtrain, ytrain, Xtest, ytest, n_timesteps, n_features, n_outputs, epochs):
     verbose, batchSize, learningRate = DEFAULT_VERBOSE_LEVEL, DEFAULT_BATCH_SIZE, DEFAULT_LEARNING_RATE
@@ -240,7 +255,6 @@ def createOneHotEncodedSet(listOfLabels):
     listOfLabels= listOfLabels.reshape(-1,1)
     integerEncoded = ordinalEncoder.fit_transform(listOfLabels)
 
-    print("integer encoded = ",integerEncoded)
     oneHotEncoded = oneHotEncoder.fit_transform(integerEncoded)
     oneHotEncoded = oneHotEncoded.toarray()
 
@@ -282,6 +296,7 @@ def labelDecoder(listOfLabels,labelValue):
 
 def ScaleInputData(X):
 
+
     scaler = MinMaxScaler()
     scaler.fit(X)
     normalised = scaler.transform(X)
@@ -317,6 +332,7 @@ def SaveSampleImages(imageData,titleData,filename):
     fig.savefig(filename)
 
 def OpenFITSFile(filename):
+
     bValidData = True
 
     if (filename):
@@ -329,6 +345,27 @@ def OpenFITSFile(filename):
         if ((imageData.shape[0] != XSIZE_FITS_IMAGE) or (imageData.shape[1] != YSIZE_FITS_IMAGE)):
             print("invalid FITS image size")
             sys.exit()
+        else:
+
+            # lets shrink the image
+
+            if (bShrinkImages):
+                newImageData = np.zeros(XSIZE_SMALL_FITS_IMAGE*YSIZE_SMALL_FITS_IMAGE)
+
+                newImageData = np.reshape(newImageData,(XSIZE_SMALL_FITS_IMAGE,YSIZE_SMALL_FITS_IMAGE))
+
+
+                for x in range(XSIZE_SMALL_FITS_IMAGE):
+                    for y in range(YSIZE_SMALL_FITS_IMAGE):
+
+                        srcX = int(((XSIZE_FITS_IMAGE/2)-(XSIZE_SMALL_FITS_IMAGE/2))+x)
+                        srcY = int(((YSIZE_FITS_IMAGE / 2) - (YSIZE_SMALL_FITS_IMAGE / 2)) +y)
+
+                        newImageData[x][y] = imageData[srcX][srcY]
+
+                imageData = newImageData
+
+
     else:
         print("Failed To Open FITS File")
         bValidData = False
@@ -604,11 +641,15 @@ def ProcessTransientData(sourceClass):
         for imageNo in range(len(imageList)):
             bValidData, sourceData = loadCSVFile(sourceLocation, sourceList[source], imageNo)
             if (bValidData):
-                sourceData = np.reshape(sourceData, (1, XSIZE_FITS_IMAGE * YSIZE_FITS_IMAGE))
 
+                if (bShrinkImages):
+                    sourceData = np.reshape(sourceData, (1, XSIZE_SMALL_FITS_IMAGE * YSIZE_SMALL_FITS_IMAGE))
+                else:
+                    sourceData = np.reshape(sourceData, (1, XSIZE_FITS_IMAGE * YSIZE_FITS_IMAGE))
                 trainingData.append(sourceData)
 
     print("No of Samples Loaded For "+sourceClass+ " = "+str(len(trainingData)))
+
     return trainingData
 
 
@@ -671,6 +712,35 @@ def GetOptimalParameters(Accuracy,Epochs, LearningRates, DropoutRates):
 
     return Epochs[largestEntry],LearningRates[largestEntry],DropoutRates[largestEntry]
 
+def TransformTrainingData(trainingData):
+
+
+    dataAsArray = np.asarray(trainingData)
+
+    dataAsArray = np.reshape(dataAsArray, (dataAsArray.shape[0], dataAsArray.shape[2]))
+
+    if (bScaleInputs):
+        dataAsArray = ScaleInputData(dataAsArray)
+
+    return dataAsArray
+
+
+def findRandomSample(trainingSet):
+
+    print("len of training set = ",len(trainingSet))
+
+    randomEntry = int(random.random()*len(trainingSet))
+
+    print("random entry = ",randomEntry)
+
+    randomSample = trainingSet[randomEntry]
+    randomSample = randomSample.reshape(-1, 1)
+    randomSample = ScaleInputData(randomSample)
+    randomSample = randomSample.reshape(-1, 1)
+
+    print(randomSample.shape)
+
+    return randomSample
 
 
 def CreateTrainingAndTestData(bNNorClassic,labelList,completeTrainingData,trainingDataSizes):
@@ -687,21 +757,19 @@ def CreateTrainingAndTestData(bNNorClassic,labelList,completeTrainingData,traini
     #create labels and scale data
 
     print("no datasets = ",len(completeTrainingData))
+    randomSelectedSamples = []
 
     for dataset in range(len(completeTrainingData)):
         print("length of dataset = ",trainingDataSizes[dataset])
 
         datasetLabels.append(np.asarray(assignLabelSet(OHELabels[dataset], trainingDataSizes[dataset])))
 
-        dataAsArray = np.asarray(completeTrainingData[dataset])
-        dataAsArray = np.reshape(dataAsArray, (dataAsArray.shape[0], dataAsArray.shape[2]))
-
-        if (bScaleInputs):
-            dataAsArray = ScaleInputData(dataAsArray)
+        dataAsArray = TransformTrainingData(completeTrainingData[dataset])
 
         finalTrainingData.append(dataAsArray)
 
-    print("no of training data samples =",len(finalTrainingData))
+        if (bCollectRandomSamples):
+            randomSelectedSamples.append(findRandomSample(dataAsArray))
 
     # create the training and test sets
 
@@ -740,6 +808,7 @@ def CreateTrainingAndTestData(bNNorClassic,labelList,completeTrainingData,traini
     ytrain = combinedTrainingLabels[0]
     ytest = combinedTestLabels[0]
 
+
     for dataset in range(1,len(combinedTrainingSet)):
 
         XTrain = np.concatenate((XTrain, combinedTrainingSet[dataset]))
@@ -758,16 +827,18 @@ def CreateTrainingAndTestData(bNNorClassic,labelList,completeTrainingData,traini
     print("ytrain shape = ", ytrain.shape)
     print("ytest shape = ", ytest.shape)
 
+    if (bRandomSelectData):
 
-    index = np.random.choice(XTrain.shape[0], len(XTrain), replace=False)
+        index = np.random.choice(XTrain.shape[0], len(XTrain), replace=False)
 
-    XTrain = XTrain[index]
-    ytrain = ytrain[index]
+        XTrain = XTrain[index]
+        ytrain = ytrain[index]
 
-    index = np.random.choice(XTest.shape[0], len(XTest), replace=False)
+        index = np.random.choice(XTest.shape[0], len(XTest), replace=False)
 
-    XTest = XTest[index]
-    ytest = ytest[index]
+        XTest = XTest[index]
+        ytest = ytest[index]
+
 
     if (bNNorClassic):
         XTrain = np.reshape(XTrain, (XTrain.shape[0], XTrain.shape[1], 1))
@@ -781,7 +852,7 @@ def CreateTrainingAndTestData(bNNorClassic,labelList,completeTrainingData,traini
     print("Final Test Label Data = ", ytest.shape)
 
 
-    return XTrain, XTest, ytrain, ytest,labelDict
+    return XTrain, XTest, ytrain, ytest,labelDict,randomSelectedSamples
 
 
 
@@ -882,7 +953,7 @@ def GetSelectedDataSets():
 
     while (bCorrectInput == False):
         numberClasses= int(input("Number of Classes : "))
-        if (numberClasses <=1) or (numberClasses > len(choiceList)):
+        if (numberClasses < 2) or (numberClasses > len(choiceList)):
             print("*** Invalid Selection - Enter again... ***")
         else:
             print("*** Number Classes Chosen = " + str(numberClasses) + " ***")
@@ -932,10 +1003,25 @@ def GetSelectedDataSets():
 
     return classLabel
 
+def TestRandomSample(labelList,labelDict,model,randomSamples):
+
+    # test model with random samples of raw image data
+
+
+    for sample in range(len(randomSamples)):
+
+        randomSample = randomSamples[sample].reshape(1, -1)
+
+        y_pred = model.predict(randomSample)
+
+        labelText = ConvertOHE(y_pred, labelDict)
+        print("For sample = "+labelList[sample]+", prediction = "+labelText[0])
+
 
 def TestRandomFITSFiles(numberFiles,labelList,model,XTest,ytest,labelDict):
 
     # test model with specific (but random) files
+
     print("*** Testing "+str(numberFiles)+ " Random FITS Files ***")
 
     totalnoIncorrect = 0
@@ -945,6 +1031,7 @@ def TestRandomFITSFiles(numberFiles,labelList,model,XTest,ytest,labelDict):
         randomEntry = int(random.random() * len(XTest))
 
         RandomSample = XTest[randomEntry].reshape(1, -1)
+
         correctLabel = ytest[randomEntry]
 
         y_pred = model.predict(RandomSample)
@@ -972,6 +1059,41 @@ def TestRandomFITSFiles(numberFiles,labelList,model,XTest,ytest,labelDict):
 
     print("Total No Correct Predictions = ",numberFiles-totalnoIncorrect)
     print("Total No Incorrect Predictions = ", totalnoIncorrect)
+
+def TestExtraSets(extraTestSets,model,labelList):
+
+    # test model with specific (but random) files
+    print("*** Testing Independent Test Sets ***")
+
+    print ("no of extra Test sets = ",len(extraTestSets))
+    print ("no of labels = ",len(labelList))
+
+
+    for classes in range(len(labelList)):
+
+        print("For class : ", labelList[classes])
+        print("testset len = ", len(extraTestSets[classes]))
+
+        dataAsArray = np.asarray(extraTestSets[classes])
+
+        dataAsArray = np.reshape(dataAsArray, (dataAsArray.shape[0], dataAsArray.shape[2]))
+
+        for set in range(len(dataAsArray)):
+
+            testSet = dataAsArray[set]
+            testSet = testSet.reshape(-1,1)
+         #   print("testset before = ",testSet)
+            testSet = ScaleInputData(testSet)
+       #     print("testset after = ",testSet)
+
+            testSet = testSet.reshape(1,len(testSet))
+            print("testset  = ", testSet)
+
+            y_pred2 = model.predict(testSet)
+            print("y_pred = ", y_pred2)
+            print("shape = ",y_pred2.shape)
+
+
 
 def ProcessPulsarData():
 
@@ -1025,8 +1147,9 @@ def ProcessPulsarData():
 
             pulsarCoord.append((skyCoord))
 
-    return bValidData, pulsarCoord
 
+
+        StorePulsarData(pulsarCoord)
 
 
 def StorePulsarData(pulsarCoord):
@@ -1097,57 +1220,165 @@ def StorePulsarData(pulsarCoord):
 
         f.close()
 
+
+
+def StackTrainingData(allTrainingData):
+
+    stackedTransientImage = []
+
+    numberDatasets = len(allTrainingData)
+    print("number datasets to stack = ",numberDatasets)
+
+    for dataset in range(numberDatasets):
+        trainingData = allTrainingData[dataset]
+        print("size of training data = ",len(trainingData))
+
+
+        numberImagesToStack = len(trainingData)
+        print("no images to stack = ",numberImagesToStack)
+        stackedImage = trainingData[0]
+        for image in range(1,len(trainingData)):
+            stackedImage += trainingData[image]
+
+
+        stackedImage = stackedImage/numberImagesToStack
+
+
+        stackedTransientImage.append(stackedImage)
+
+
+    return stackedTransientImage
+
+
+def SetPlotParameters():
+    plt.rc('axes', titlesize=SMALL_FONT_SIZE)
+    plt.rc('axes', labelsize=SMALL_FONT_SIZE)
+    plt.rc('xtick', labelsize=SMALL_FONT_SIZE)
+    plt.rc('ytick', labelsize=SMALL_FONT_SIZE)
+
+def DisplayStackedImages(stackedData,labelList):
+
+    SetPlotParameters()
+
+   # fig, axs = plt.subplots(len(stackedData))
+
+    numberPlots = len(stackedData)
+
+    fig, axs = plt.subplots(3,2)
+
+    figx = 0
+    figy = 0
+
+    for imageNo in range(0, len(stackedData)):
+        imageData = stackedData[imageNo]
+        x = np.arange(len(imageData[0]))
+
+        axs[figx,figy].scatter(x, imageData[0], marker='+')
+        axs[figx,figy].set_title(labelList[imageNo])
+        axs[figx,figy].scatter(x, imageData[0], marker='+')
+        axs[figx,figy].tick_params(axis='x', labelsize=SMALL_FONT_SIZE)
+
+        figy += 1
+
+        if (figy > 1):
+            figx += 1
+            figy = 0
+
+ #   plt.show()
+
+    fig.savefig(DEFAULT_STACKED_FILENAME)
+
+
+def CreateSetCSVFiles():
+
+
+    if (bCreateAGNFiles):
+        print("*** Processing All AGN Files ***")
+        sourceAGNList = ScanForSources(DEFAULT_AGN_SOURCE_LOCATION)
+        agnSourceFileDict = CreateAllCSVFiles(DEFAULT_AGN_SOURCE_LOCATION, sourceAGNList)
+
+        ProcessAllCSVFiles(DEFAULT_AGN_SOURCE_LOCATION, agnSourceFileDict, sourceAGNList)
+
+    if (bCreatePULSARFiles):
+        print("*** Processing All PULSAR Files ***")
+        sourcePULSARList = ScanForSources(DEFAULT_PULSAR_SOURCE_LOCATION)
+        pulsarSourceFileDict = CreateAllCSVFiles(DEFAULT_PULSAR_SOURCE_LOCATION, sourcePULSARList)
+
+        ProcessAllCSVFiles(DEFAULT_PULSAR_SOURCE_LOCATION, pulsarSourceFileDict, sourcePULSARList)
+
+    if (bCreateBLAZARFiles):
+        print("*** Processing All BLAZAR Files ***")
+
+        sourceBLAZARList = ScanForSources(DEFAULT_BLAZAR_SOURCE_LOCATION)
+        blazarSourceFileDict = CreateAllCSVFiles(DEFAULT_BLAZAR_SOURCE_LOCATION, sourceBLAZARList)
+
+        ProcessAllCSVFiles(DEFAULT_BLAZAR_SOURCE_LOCATION, blazarSourceFileDict, sourceBLAZARList)
+
+    if (bCreateSEYFERTFiles):
+        print("*** Processing All SEYFERT Files ***")
+
+        sourceSEYFERTList = ScanForSources(DEFAULT_SEYFERT_SOURCE_LOCATION)
+        seyfertSourceFileDict = CreateAllCSVFiles(DEFAULT_SEYFERT_SOURCE_LOCATION, sourceSEYFERTList)
+
+        ProcessAllCSVFiles(DEFAULT_SEYFERT_SOURCE_LOCATION, seyfertSourceFileDict, sourceSEYFERTList)
+
+    if (bCreateQUASARFiles):
+        print("*** Processing All QUASAR Files ***")
+
+        sourceQUASARList = ScanForSources(DEFAULT_QUASAR_SOURCE_LOCATION)
+        quasarSourceFileDict = CreateAllCSVFiles(DEFAULT_QUASAR_SOURCE_LOCATION, sourceQUASARList)
+
+        ProcessAllCSVFiles(DEFAULT_QUASAR_SOURCE_LOCATION, quasarSourceFileDict, sourceQUASARList)
+
+def CreateModelFileName(labelList):
+
+    filename = labelList[0]
+
+    for labelNo in range(1, len(labelList)):
+        filename = filename + '_' + labelList[labelNo]
+
+    filename = DEFAULT_MODEL_FILE_LOCATION+ filename + MODEL_FILENAME_EXTENSION
+
+    return filename
+
+
+def SaveModel(labelList,model):
+    import pickle
+
+    filename = CreateModelFileName(labelList)
+
+    print("save model, filename = ",filename)
+
+    with open(filename,'wb')as file:
+        pickle.dump(model,file)
+
+
+def TestRetrievedModel(labelList,XTest,ytest):
+    import pickle
+
+    filename = CreateModelFileName(labelList)
+    print("Retrieved Model = ",filename)
+    with open(filename, 'rb')as file:
+        pickleModel = pickle.load(file)
+
+    score = pickleModel.score(XTest,ytest)
+
+    print("Test Score (Retrieved Model): {0:.2f} %".format(100*score))
+    Ypredict = pickleModel.predict(XTest)
+
+    return pickleModel
+
 def main():
 
     if (bCreatePulsarData):
 
-        bValidData, pulsarCoord = ProcessPulsarData()
+        ProcessPulsarData()
 
-        if (bValidData):
-
-            StorePulsarData(pulsarCoord)
 
     if (bCreateCSVFiles):
 
+        CreateSetCSVFiles()
 
-        if (bCreateAGNFiles):
-
-            print("*** Processing All AGN Files ***")
-            sourceAGNList = ScanForSources(DEFAULT_AGN_SOURCE_LOCATION)
-            agnSourceFileDict = CreateAllCSVFiles(DEFAULT_AGN_SOURCE_LOCATION,sourceAGNList)
-
-            ProcessAllCSVFiles(DEFAULT_AGN_SOURCE_LOCATION,agnSourceFileDict,sourceAGNList)
-
-        if (bCreatePULSARFiles):
-            print("*** Processing All PULSAR Files ***")
-            sourcePULSARList = ScanForSources(DEFAULT_PULSAR_SOURCE_LOCATION)
-            pulsarSourceFileDict = CreateAllCSVFiles(DEFAULT_PULSAR_SOURCE_LOCATION, sourcePULSARList)
-
-            ProcessAllCSVFiles(DEFAULT_PULSAR_SOURCE_LOCATION, pulsarSourceFileDict, sourcePULSARList)
-
-        if (bCreateBLAZARFiles):
-            print("*** Processing All BLAZAR Files ***")
-
-            sourceBLAZARList = ScanForSources(DEFAULT_BLAZAR_SOURCE_LOCATION)
-            blazarSourceFileDict = CreateAllCSVFiles(DEFAULT_BLAZAR_SOURCE_LOCATION, sourceBLAZARList)
-
-            ProcessAllCSVFiles(DEFAULT_BLAZAR_SOURCE_LOCATION,blazarSourceFileDict, sourceBLAZARList)
-
-        if (bCreateSEYFERTFiles):
-            print("*** Processing All SEYFERT Files ***")
-
-            sourceSEYFERTList = ScanForSources(DEFAULT_SEYFERT_SOURCE_LOCATION)
-            seyfertSourceFileDict = CreateAllCSVFiles(DEFAULT_SEYFERT_SOURCE_LOCATION, sourceSEYFERTList)
-
-            ProcessAllCSVFiles(DEFAULT_SEYFERT_SOURCE_LOCATION, seyfertSourceFileDict, sourceSEYFERTList)
-
-        if (bCreateQUASARFiles):
-            print("*** Processing All QUASAR Files ***")
-
-            sourceQUASARList = ScanForSources(DEFAULT_QUASAR_SOURCE_LOCATION)
-            quasarSourceFileDict = CreateAllCSVFiles(DEFAULT_QUASAR_SOURCE_LOCATION, sourceQUASARList)
-
-            ProcessAllCSVFiles(DEFAULT_QUASAR_SOURCE_LOCATION, quasarSourceFileDict, sourceQUASARList)
     else:
 
 
@@ -1161,35 +1392,56 @@ def main():
 
         print("*** Loading Training Data ***")
 
+        extraTestSet = []
+
         for classes in range(len(labelList)):
 
             trainingData = ProcessTransientData(labelList[classes])
+
             trainingDataSizes.append(len(trainingData))
             completeTrainingData.append(trainingData)
+
+
+
+        if (bStackImages):
+            stackedImages = StackTrainingData(completeTrainingData)
+
+            print("no of stacked images = ",len(stackedImages))
+            DisplayStackedImages(stackedImages, labelList)
 
         print("*** Creating Training and Test Data Sets ***")
         if (bTestClassicModels):
 
-            XTrain, XTest, ytrain, ytest,labelDict = CreateTrainingAndTestData(False,labelList,completeTrainingData,trainingDataSizes)
+            XTrain, XTest, ytrain, ytest,labelDict,randomSamples = CreateTrainingAndTestData(False,labelList,completeTrainingData,trainingDataSizes)
 
             print("*** Evaluating Multiple Classic Models ***")
             MultipleClassicModels(XTrain, ytrain, XTest, ytest)
 
 
         if (bTestRandomForestModel):
-                XTrain, XTest, ytrain, ytest,labelDict = CreateTrainingAndTestData(False,labelList, completeTrainingData,trainingDataSizes)
+                XTrain, XTest, ytrain, ytest,labelDict,randomSamples = CreateTrainingAndTestData(False,labelList, completeTrainingData,trainingDataSizes)
 
-                print("*** Evaluating Random Forest Model ***")
-                randomForestModel = RandomForestModel(XTrain, ytrain, XTest, ytest)
+                if (bTestRestoredModel):
+                    randomForestModel = TestRetrievedModel(labelList,XTest, ytest)
+                else:
+                    print("*** Evaluating Random Forest Model ***")
+                    randomForestModel = RandomForestModel(XTrain, ytrain, XTest, ytest)
 
+                    if (bSaveModel):
+                        SaveModel(labelList,randomForestModel)
+
+                        randomForestModel= TestRetrievedModel(labelList,XTest, ytest)
+
+                if (bCollectRandomSamples):
+                    TestRandomSample(labelList, labelDict, randomForestModel, randomSamples)
 
                 if (bTestRandomFiles):
 
-                    TestRandomFITSFiles(100*DEFAULT_FITS_NO_TESTS,labelList,randomForestModel,XTest, ytest,labelDict)
+                    TestRandomFITSFiles(DEFAULT_FITS_NO_TESTS, labelList, randomForestModel, XTest, ytest, labelDict)
 
         else:
 
-            XTrain, XTest, ytrain, ytest,labelDict = CreateTrainingAndTestData(True,labelList, completeTrainingData,trainingDataSizes)
+            XTrain, XTest, ytrain, ytest,labelDict,randomSamples = CreateTrainingAndTestData(True,labelList, completeTrainingData,trainingDataSizes)
 
             n_timesteps = XTrain.shape[1]
             n_features = XTrain.shape[2]
