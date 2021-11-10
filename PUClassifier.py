@@ -28,15 +28,17 @@ DEFAULT_BLAZAR_SOURCE_LOCATION = 'BLAZAR/'
 DEFAULT_SEYFERT_SOURCE_LOCATION = 'SEYFERT/'
 DEFAULT_QUASAR_SOURCE_LOCATION = 'QUASAR/'
 DEFAULT_TEST_SOURCE_LOCATION = 'TEST_DATA/'
-DEFAULT_SOURCES_SOURCE_LOCATION = 'SOURCES/'
+DEFAULT_SOURCES_LOCATION = 'SOURCES/'
 DEFAULT_RANDOM_FILE_TEST_LOCATION = '/Volumes/ExtraDisk/VAST_RANDOM_FILE_TESTS/'
 
 DEFAULT_VAST_RANDOM_FILE_TEST_LOCATION = '/Volumes/ExtraDisk/TESTFITS/'
-DEFAULT_EXISTING_MODEL_LOCATION = '/Volumes/ExtraDisk/EXISTING_MODELS/'
-DEFAULT_EXISTING_SOAK_TEST_LOCATION = '/Volumes/ExtraDisk/VAST_CONSTRAINED_MODELS/'
-DEFAULT_FULL_BINARY_MODELS_LOCATION = '/Volumes/ExtraDisk/FULL_BINARY_MODELS/'
+DEFAULT_EXISTING_MODEL_LOCATION = '/Volumes/ExtraDisk/OUTPUT_MODELS/'
 
+VAST_OTHER_BINARY_MODELS_LOCATION = '/Volumes/ExtraDisk/VAST_DATA/BINARY_OTHER_MODELS/'
+VAST_FULL_BINARY_MODELS_LOCATION = '/Volumes/ExtraDisk/VAST_DATA/MULTI_BINARY_MODELS/'
 
+NVSS_OTHER_BINARY_MODELS_LOCATION = '/Volumes/ExtraDisk/NVSS_DATA/BINARY_OTHER_MODELS/'
+NVSS_FULL_BINARY_MODELS_LOCATION = '/Volumes/ExtraDisk/NVSS_DATA/MULTI_BINARY_MODELS/'
 
 DEFAULT_NVSS_DATASET =  "NVSS"
 DEFAULT_VAST_DATASET = "VAST"
@@ -46,17 +48,17 @@ VAST_SHORT_NAME = 'V'
 
 
 DEFAULT_HYPER_FILENAME = 'CNNHyper.txt'
-DEFAULT_PULSAR_SOURCES_FILENAME = DEFAULT_PULSAR_SOURCE_LOCATION+'ATNF.txt'
+ORIGINAL_PULSAR_SOURCES_FILENAME = DEFAULT_PULSAR_SOURCE_LOCATION+'ATNF.txt'
 
 DEFAULT_NVSS_CATALOG_FILENAME = '/Volumes/ExtraDisk/NVSS/CATALOG.FIT'
 
-DEFAULT_AGN_SOURCES_FILENAME = DEFAULT_SOURCES_SOURCE_LOCATION+'AGN_sources.txt'
-DEFAULT_BLAZAR_SOURCES_FILENAME = DEFAULT_TEST_SOURCE_LOCATION+'BLAZAR_sources.txt'
-DEFAULT_SEYFERT_SOURCES_FILENAME = DEFAULT_TEST_SOURCE_LOCATION+'SEYFERT_sources.txt'
-DEFAULT_QUASAR_SOURCES_FILENAME = DEFAULT_TEST_SOURCE_LOCATION+'QUASAR_sources.txt'
-DEFAULT_PULSAR_SOURCES_FILENAME = DEFAULT_TEST_SOURCE_LOCATION+'PULSAR_sources.txt'
+DEFAULT_AGN_SOURCES_FILENAME = 'AGN_sources.txt'
+DEFAULT_BLAZAR_SOURCES_FILENAME = 'BLAZAR_sources.txt'
+DEFAULT_SEYFERT_SOURCES_FILENAME = 'SEYFERT_sources.txt'
+DEFAULT_QUASAR_SOURCES_FILENAME = 'QUASAR_sources.txt'
+DEFAULT_PULSAR_SOURCES_FILENAME = 'PULSAR_sources.txt'
 
-DEFAULT_HYPERPARAMETERS_FILE = DEFAULT_TEST_SOURCE_LOCATION+DEFAULT_HYPER_FILENAME
+DEFAULT_HYPERPARAMETERS_FILE = DEFAULT_VAST_RANDOM_FILE_TEST_LOCATION+DEFAULT_HYPER_FILENAME
 
 DEFAULT_FITS_NO_TESTS = 10
 
@@ -69,6 +71,9 @@ DEFAULT_PULSARCOORDS_FILE = DEFAULT_PULSAR_SOURCE_LOCATION+'PulsarCoords.txt'
 DEFAULT_STACKED_FILENAME = DEFAULT_TEST_SOURCE_LOCATION+'StackedImages.png'
 DEFAULT_DUPLICATES_FILENAME = DEFAULT_TEST_SOURCE_LOCATION+'DuplicateSources.txt'
 DEFAULT_MODEL_FILE_LOCATION = DEFAULT_TEST_SOURCE_LOCATION
+
+BINARY_OTHER_MODELS = 'O'
+BINARY_FULL_MODELS = 'F'
 
 DEFAULT_VIZIER_SOURCES_FILENAME = DEFAULT_TEST_SOURCE_LOCATION+'VizierSources.txt'
 
@@ -97,8 +102,7 @@ DEFAULT_NVSS_FITS_FILENAMES = DEFAULT_TEST_SOURCE_LOCATION+'NVSS_FITS_FILENAMES.
 DEFAULT_RANDOM_SAMPLES_DIR = 'RANDOM_SAMPLES/'
 DEFAULT_RANDOM_NVSS_SOURCE_LOCATION = DEFAULT_NVSS_SOURCE_LOCATION+ DEFAULT_RANDOM_SAMPLES_DIR
 
-
-MAX_NUMBER_DATA_SAMPLES = 540
+MAX_NUMBER_MODELS = 5
 
 
 # Offset data for processing PULSAR text files
@@ -150,6 +154,7 @@ BLAZAR_DATA_SELECTED = "B"
 QUASAR_DATA_SELECTED = "Q"
 PULSAR_DATA_SELECTED = "P"
 
+
 NVSS_AGN_DATA_SELECTED = "NA"
 NVSS_SEYFERT_DATA_SELECTED = "NS"
 NVSS_BLAZAR_DATA_SELECTED = "NB"
@@ -181,15 +186,19 @@ DEFAULT_NO_NEURONS = 100
 
 TRAIN_TEST_RATIO = 0.80  # ratio of the total data for training
 
+DEFAULT_NUMBER_MODELS  = 5
+
 SMALL_FONT_SIZE = 8
 MEDIUM_FONT_SIZE = 10
 BIGGER_FONT_SIZE = 12
 
 
-OP_BUILD_FULL_MODEL = 'F'
-OP_BUILD_BINARY_MODELS = 'B'
-OP_TEST_MODEL = 'T'
-OP_TEST_SOAK = 'S'
+
+OP_BUILD_FULL_MODEL = '1'
+OP_BUILD_BINARY_MODELS = '2'
+OP_TEST_MODEL = '3'
+OP_TEST_BLIND = '4'
+OP_BUILD_STATS = '5'
 
 OP_MODEL_RANDOM= 'R'
 OP_MODEL_CNN = 'C'
@@ -198,9 +207,11 @@ OP_MODEL_SVM = 'O'
 
 DEFAULT_DICT_TYPE = '_dict.txt'
 DEFAULT_SCALER_TYPE = '_scaler.bin'
+DEFAULT_ENCODER_TYPE = '.zip'
 MODEL_FILENAME_EXTENSION = '.pkl'
 MODEL_TXT_EXTENSION = '.txt'
 MODEL_BIN_EXTENSION = '.bin'
+MODEL_ENC_EXTENSION = '.zip'
 DEFAULT_RANDOM_TYPE = 'test.txt'
 
 
@@ -210,11 +221,22 @@ DEFAULT_TEST_V_P_O = 'V_P_O'
 DEFAULT_TEST_V_S_O = 'V_S_O'
 DEFAULT_TEST_V_B_O = 'V_B_O'
 
+DEFAULT_TEST_N_Q_O = 'N_Q_O'
+DEFAULT_TEST_N_A_O = 'N_A_O'
+DEFAULT_TEST_N_P_O = 'N_P_O'
+DEFAULT_TEST_N_S_O = 'N_S_O'
+DEFAULT_TEST_N_B_O = 'N_B_O'
+
+
+# used for stat comparison on images
+
+
 
 bStratifiedSplit = False # use stratified split to create random train/test sets
 bScaleInputs = True # use minmax scaler for inputs
 bNormalizeData = False # or normalize instead
 bStandardScaler = False # or normalize instead
+
 
 bCreateVASTFiles = True # process all VAST related FITS Images
 bCreateNVSSFiles = False # process all NVSS related FITS Images
@@ -225,6 +247,7 @@ bCreateBLAZARFiles = True
 bCreateAGNFiles = True
 bCreatePULSARFiles = True
 bCreateTESTFiles = True
+
 
 
 
@@ -251,29 +274,39 @@ bSelectNVSS_PULSAR = False
 
 bCreateNVSSCatalog = False # for inital pre-procesing of NVSS Catalog
 bTestNVSSCatalog = False # for testing againt NVSS catalogue
+bFullTestNVSSCatalog = False # for testing againt NVSS catalogue
 bTestNVSSFiles = False # for testing againt a select set of NVSS FITS files
 bTestIndSamples = False # test some independent samples
 bDataCreation = False # for general data creation functions
 bCreateCSVFiles = False # flag set to create all CSV files from FITS images
-
+bTakeTop2Models = True # if false, will continue to searh below top 2 models
 bCNNBinary = True  # for sigmoid vs softmax activation
 bCollectPossibilities = False # log potential outcomes
 bDebug = False # swich on debug code
 bLoadFullBinaryModels = True # load full binary models for comparison
 bOptimiseHyperParameters = False # optimise hyper parameters used on convolutional model
 bTestFITSFile = False # test CNN model with individual FITS files
-bTestClassicModels = False # test selection of other models
 bTestRandomForestModel = False # test random forest model only
-bSoakTestModel = False # perform soak testing of model
+
 bSaveImageFiles = False # save FITS files for presentations
 
 bDisplayProbs = False # display predicted probabilities
 bDisplayIndividualPredictions = True
 bStackImages = False # stack all source images
+bDisplayStackedImages = False
 bShrinkImages = False  # to experiment with smalleer FITS images
 bRandomSelectData = True # set false if you want to eliminate randomizing of training and test data
 bConstrainSamples=False # constrain samples to size of primary dataset
+bEqualiseAllSamples=True # equalise all data samples
+bBlindTestAllSamples = True
+bBlindTestAGN = False
+bBlindTestQUASAR = True
+bBlindTestPULSAR = False
+bBlindTestSEYFERT = False
+bBlindTestBLAZAR = False
 
+
+bReduceFalseNegatives = True # reduce false negatives by picking largest probability
 bSaveModel = True # save model for future use
 bAccessNVSS = False # access NVSS data
 bCheckForDuplicates = False # check if we have duplicate sources across classes
@@ -285,6 +318,8 @@ bSelectRandomNVSS = False # Do a random selection from NVSS Catalog (or not)
 bStoreSourcesToFile = False # retain source list as processing
 bCheckTrainingAndTestSet = False # check that training and test sets don't overlap
 bCheckDupRandomSamples = False # check that random samples are not in test or training set
+
+
 
 def evaluateCNNModel(Xtrain, ytrain, Xtest, ytest, n_timesteps, n_features, n_outputs, epochs):
     verbose, batchSize, learningRate = DEFAULT_VERBOSE_LEVEL, DEFAULT_BATCH_SIZE, DEFAULT_LEARNING_RATE
@@ -409,17 +444,20 @@ def createOneHotEncodedSet(listOfLabels):
     listOfLabels = np.array(listOfLabels)
 
     listOfLabels= listOfLabels.reshape(-1,1)
+ #   print(listOfLabels)
     integerEncoded = ordinalEncoder.fit_transform(listOfLabels)
+ #   print(integerEncoded)
 
     oneHotEncoded = oneHotEncoder.fit_transform(integerEncoded)
     oneHotEncoded = oneHotEncoded.toarray()
 
+  #  print(oneHotEncoded)
+
     for i in range(len(listOfLabels)):
         labelDict[integerEncoded[i][0]] = OriglistOfLabels[i]
-     #   labelDict[integerEncoded[i][0]] = listOfLabels[i]
 
 
-    return oneHotEncoded, labelDict
+    return oneHotEncoded, labelDict,oneHotEncoder
 
 
 
@@ -634,6 +672,8 @@ def ScanForImages(sourceLocation,sourceNumber):
 
     return imageLocation, imageList
 
+
+
 def ScanForModels(modelLocation):
     import pathlib
 
@@ -642,6 +682,7 @@ def ScanForModels(modelLocation):
     modelList = []
     dictList = []
     scalerList = []
+    encoderList = []
 
     fileList = os.scandir(modelLocation)
     for entry in fileList:
@@ -656,27 +697,30 @@ def ScanForModels(modelLocation):
 
                 if (extension == DEFAULT_MODEL_EXTENSION):
                     # found a model
-
+                    print("found model = ",entry.name)
                     modelList.append(entry.name)
 
                 elif (extension == MODEL_TXT_EXTENSION):
                     # found a dict
-
+                    print("found dict = ",entry.name)
                     dictList.append(entry.name)
                 elif (extension == MODEL_BIN_EXTENSION):
                     # found a scaler
-
+                    print("found scaler = ",entry.name)
                     scalerList.append(entry.name)
-
+                elif (extension == MODEL_ENC_EXTENSION):
+                    # found an encoder
+                    print("found encoder = ",entry.name)
+                    encoderList.append(entry.name)
             else:
                 if (bDebug):
                     print("File Entry Ignored For ",entry.name)
 
-    if (len(modelList) >0) and (len(modelList) == len(dictList)) and (len(modelList) == len(scalerList)):
+    if (len(modelList) >0) and (len(modelList) == len(dictList)) and (len(modelList) == len(scalerList)) and (len(modelList) == len(encoderList)):
         bValidData=True
 
 
-    return bValidData,modelList,dictList,scalerList
+    return bValidData,modelList,dictList,scalerList,encoderList
 
 
 def ScanForTestImages(imageLocation):
@@ -704,7 +748,7 @@ def ScanForTestImages(imageLocation):
 
     return bValidData, imageList
 
-def OpenOptimsationFile():
+def OpenOptimisationFile():
 
     f = open(DEFAULT_HYPERPARAMETERS_FILE, "w")
     return f
@@ -779,31 +823,13 @@ def StoreIndividualCSVFile(fitsImageFile,source):
     if (bValidData):
         # ok - found the image data, now store in the correct CSV file
         csvFilename = NVSS_CATALOG_CSV_FILENAME + str(source) + TEXT_FILE_EXTENSION
-        print("csvFilename = ",csvFilename)
+        print("Storing NVSS Image In ",csvFilename)
         f = open(csvFilename,"w")
         if (f):
             bResultOK = True
             StoreImageContents(f, imageData)
 
     return bResultOK,csvFilename
-
-def StoreTestCSVFile(fitsImageFile):
-
-    bResultOK= False
-
-    bValidData,imageData = OpenFITSFile(DEFAULT_TEST_NVSS_SOURCE_LOCATION+fitsImageFile)
-    if (bValidData):
-        # ok - found the image data, now store in the correct CSV file
-        csvFilename = fitsImageFile.split('.')
-        csvFilename = DEFAULT_TEST_NVSS_CSV_SOURCE_LOCATION+csvFilename[0]+TEXT_FILE_EXTENSION
-
-        f = open(csvFilename,"w")
-        if (f):
-            bResultOK = True
-            StoreImageContents(f, imageData)
-
-    return bResultOK,csvFilename
-
 
 
 def GetFITSFile(imageLocation,imageName):
@@ -856,10 +882,31 @@ def loadCSVFile(sourceDir,source,imageNo):
 
     return bDataValid,dataReturn
 
+def loadNVSSCSVFile(imageNo):
+
+    filePath =  NVSS_CATALOG_CSV_FILENAME+str(imageNo+1)+ TEXT_FILE_EXTENSION
+
+    bDataValid = True
+
+    if (os.path.isfile(filePath)):
+
+     #   print("*** Loading NVSS CSV File "+filePath+" ***")
+        dataframe = pd.read_csv(filePath, header=None)
+        dataReturn = dataframe.values
+      #  print("*** Completed Loading CSV File")
+    else:
+        print("*** CSV File Does Not Exist ***")
+        bDataValid = False
+        dataReturn = []
+
+    return bDataValid,dataReturn
+
+
+
 def loadPULSARData():
 
 
-    filePath =  DEFAULT_PULSAR_SOURCES_FILENAME
+    filePath =  ORIGINAL_PULSAR_SOURCES_FILENAME
     bDataValid = True
 
     if (os.path.isfile(filePath)):
@@ -877,36 +924,45 @@ def loadPULSARData():
     return bDataValid,dataReturn
 
 
-def StoreSourcesToFile(rootData,sourceLocation,sourceList):
+def OpenSourcesFile(rootData,sourceClass,sourceLocation,source):
 
-    if (sourceLocation == DEFAULT_AGN_SOURCE_LOCATION):
+    if (sourceClass == DEFAULT_AGN_CLASS):
         filename = DEFAULT_AGN_SOURCES_FILENAME
-        sourceType = DEFAULT_AGN_CLASS
-    elif (sourceLocation == DEFAULT_NVSS_AGN_SOURCE_LOCATION):
-        filename = DEFAULT_NVSS_AGN_SOURCES_FILENAME
-        sourceType = DEFAULT_NVSS_AGN_CLASS
-    elif (sourceLocation == DEFAULT_BLAZAR_SOURCE_LOCATION):
+    elif (sourceClass == DEFAULT_BLAZAR_CLASS):
         filename = DEFAULT_BLAZAR_SOURCES_FILENAME
-        sourceType = DEFAULT_BLAZAR_CLASS
-    elif (sourceLocation == DEFAULT_SEYFERT_SOURCE_LOCATION):
-        filename = DEFAULT_SEYFERT_SOURCES_FILENAME
-        sourceType = DEFAULT_SEYFERT_CLASS
-    elif (sourceLocation == DEFAULT_QUASAR_SOURCE_LOCATION):
+    elif (sourceClass == DEFAULT_QUASAR_CLASS):
         filename = DEFAULT_QUASAR_SOURCES_FILENAME
-        sourceType = DEFAULT_QUASAR_CLASS
-    elif (sourceLocation == DEFAULT_PULSAR_SOURCE_LOCATION):
+    elif (sourceClass == DEFAULT_SEYFERT_CLASS):
+        filename = DEFAULT_SEYFERT_SOURCES_FILENAME
+    elif (sourceClass == DEFAULT_PULSAR_CLASS):
         filename = DEFAULT_PULSAR_SOURCES_FILENAME
-        sourceType = DEFAULT_PULSAR_CLASS
 
+    else:
+        print("*** UNKNOWN Source Class ***")
+        sys.exit()
+
+
+    filename = rootData+DEFAULT_SOURCES_LOCATION+source+UNDERSCORE+filename
 
     f = open(filename, "w")
-    if (f):
-        for source in range(len(sourceList)):
 
-            strr = 'Source: '+sourceType+' : '+str(sourceList[source])+' \n'
+    return f
+
+def StoreSourcesToFile(f,sourceType,source, imageList):
+
+
+    if (f):
+
+        strr = 'Source: '+sourceType+' : '+source+' \n'
+        f.write(strr)
+        for imageNo in range(len(imageList)):
+            strr = 'Image No '+str(imageNo)+' (For Source: '+source+')'+' - '+imageList[imageNo]+' \n'
+            print(strr)
             f.write(strr)
 
-        f.close()
+    else:
+        print("*** Unable To Access SOURCES file ***")
+        sys.exit()
 
 def ProcessTransientData(dataSet,sourceClass,maxNumberSamples):
 
@@ -949,14 +1005,17 @@ def ProcessTransientData(dataSet,sourceClass,maxNumberSamples):
 
     sourceList = ScanForSources(sourceLocation)
 
-    if (bStoreSourcesToFile):
-        StoreSourcesToFile(rootData,sourceLocation,sourceList)
-
     numberSources = len(sourceList)
 
     for source in range(numberSources):
 
         imageLocation, imageList = ScanForImages(sourceLocation, sourceList[source])
+
+        if (bStoreSourcesToFile):
+
+            fSourceFile = OpenSourcesFile(rootData,sourceClass, sourceLocation, sourceList[source])
+            StoreSourcesToFile(fSourceFile,sourceClass, sourceList[source],imageList)
+            fSourceFile.close()
 
         for imageNo in range(len(imageList)):
 
@@ -993,9 +1052,9 @@ def createLabels(primaryLabel):
 
     labelList = [primaryLabel,DEFAULT_OTHER_CLASS]
 
-    OHELabels,labelDict = createOneHotEncodedSet(labelList)
+    OHELabels,labelDict,OHE = createOneHotEncodedSet(labelList)
 
-    return OHELabels,labelDict,labelList
+    return OHELabels,labelDict,labelList,OHE
 
 def decodeLabels(labelList,predictions):
 
@@ -1015,6 +1074,18 @@ def assignLabelSet(label, numberOfSamples):
     a = np.empty((shape))
 
     a[:]=label
+
+    return a
+
+def assignLabelValue(labelDict, numberOfSamples):
+
+    labelValue = [1.0,0.0]
+
+    shape = (numberOfSamples,len(labelValue))
+
+    a = np.empty((shape))
+
+    a[:]=labelValue
 
     return a
 
@@ -1095,15 +1166,123 @@ def TransformTrainingData(trainingData):
 def createFullLabels(labelList):
 
 
-    OHELabels,labelDict = createOneHotEncodedSet(labelList)
+    OHELabels,labelDict,OHE = createOneHotEncodedSet(labelList)
 
-    return OHELabels,labelDict
+    return OHELabels,labelDict,OHE
 
+
+def CreateFullTrainingAndTestData(bNNorClassic,labelList,completeTrainingData,trainingDataSizes):
+
+    finalTrainingData = []
+    datasetLabels = []
+
+    #create labels and scale data
+
+    OHELabels, labelDict,OHE = createFullLabels(labelList)
+
+    print("no of datasets = ",len(completeTrainingData))
+    print("labelDict = ",labelDict)
+
+    for dataset in range(len(completeTrainingData)):
+
+        print("length of dataset = ",trainingDataSizes[dataset])
+
+        dataAsArray = TransformTrainingData(completeTrainingData[dataset])
+        print("shape = ",dataAsArray.shape)
+
+        datasetLabels.append(np.asarray(assignLabelSet(OHELabels[dataset], trainingDataSizes[dataset])))
+
+        finalTrainingData.append(dataAsArray)
+
+    # create the training and test sets
+
+    combinedTrainingSet = []
+    combinedTestSet = []
+    combinedTrainingLabels = []
+    combinedTestLabels = []
+
+    # scale the data
+
+    joinedTrainingData = finalTrainingData[0]
+    for dataset in range(1,len(finalTrainingData)):
+        classTrainingData = finalTrainingData[dataset]
+        joinedTrainingData = np.concatenate((joinedTrainingData,classTrainingData))
+
+    joinedTrainingData,scaler = ScaleInputData(joinedTrainingData)
+
+    #now split back up again
+
+    startPos = 0
+    for dataset in range(len(finalTrainingData)):
+
+        finalTrainingData[dataset] = joinedTrainingData[startPos:startPos+trainingDataSizes[dataset]]
+        startPos = startPos+trainingDataSizes[dataset]
+
+
+    for dataset in range(len(finalTrainingData)):
+        classTrainingData = finalTrainingData[dataset]
+        classLabels = datasetLabels[dataset]
+
+        print("shape of class data = ",classTrainingData.shape)
+        print("shape of class labels = ", classLabels.shape)
+
+
+        numberVectorsInTrainingSet = int(round(classTrainingData.shape[0] * TRAIN_TEST_RATIO))
+        numberVectorsInTestSet = int(round(classTrainingData.shape[0]-numberVectorsInTrainingSet))
+
+        combinedTrainingSet.append(classTrainingData[:numberVectorsInTrainingSet])
+        combinedTrainingLabels.append(classLabels[:numberVectorsInTrainingSet])
+
+        combinedTestSet.append(classTrainingData[numberVectorsInTrainingSet:])
+        combinedTestLabels.append(classLabels[numberVectorsInTrainingSet:])
+
+        print(" no in training set = ",numberVectorsInTrainingSet)
+        print(" no in test set = ", numberVectorsInTestSet)
+
+
+
+    print("no of data sets to combine = ",len(combinedTrainingSet))
+    # now concatenate all training and test sets to create one combined training and test set
+
+    XTrain = combinedTrainingSet[0]
+    XTest = combinedTestSet[0]
+    ytrain = combinedTrainingLabels[0]
+    ytest = combinedTestLabels[0]
+
+
+    for dataset in range(1,len(combinedTrainingSet)):
+
+        XTrain = np.concatenate((XTrain, combinedTrainingSet[dataset]))
+        XTest = np.concatenate((XTest, combinedTestSet[dataset]))
+        ytrain = np.concatenate((ytrain,combinedTrainingLabels[dataset]))
+        ytest = np.concatenate((ytest, combinedTestLabels[dataset]))
+
+    # create an integrated set of training data which includes the transient and the random data
+    # ensure that the sequence numbers are kept to manage the label data
+
+
+
+    index = np.random.choice(XTrain.shape[0], len(XTrain), replace=False)
+
+    XTrain = XTrain[index]
+    ytrain = ytrain[index]
+
+    index = np.random.choice(XTest.shape[0], len(XTest), replace=False)
+
+    XTest = XTest[index]
+    ytest = ytest[index]
+
+    if (bNNorClassic):
+        XTrain = np.reshape(XTrain, (XTrain.shape[0], XTrain.shape[1], 1))
+        XTest = np.reshape(XTest, (XTest.shape[0], XTest.shape[1], 1))
+
+
+    return XTrain, XTest, ytrain, ytest,labelDict,scaler,labelList,OHE
 
 
 def CreateTrainingAndTestData(bNNorClassic,primaryLabel,completeTrainingData,trainingDataSizes):
 
-    OHELabels,labelDict,labelList = createLabels(primaryLabel)
+    OHELabels,labelDict,labelList,OHE = createLabels(primaryLabel)
 
     datasetLabels = []
     finalTrainingData = []
@@ -1174,8 +1353,6 @@ def CreateTrainingAndTestData(bNNorClassic,primaryLabel,completeTrainingData,tra
         print(" no in training set = ",numberVectorsInTrainingSet)
         print(" no in test set = ", numberVectorsInTestSet)
 
-
-
     print("no of data sets to combine = ",len(combinedTrainingSet))
     # now concatenate all training and test sets to create one combined training and test set
 
@@ -1204,6 +1381,18 @@ def CreateTrainingAndTestData(bNNorClassic,primaryLabel,completeTrainingData,tra
     if (bNNorClassic):
         XTrain = np.reshape(XTrain, (XTrain.shape[0], XTrain.shape[1], 1))
         XTest = np.reshape(XTest, (XTest.shape[0], XTest.shape[1], 1))
+
+
+
+    index = np.random.choice(XTrain.shape[0], len(XTrain), replace=False)
+
+    XTrain = XTrain[index]
+    ytrain = ytrain[index]
+
+    index = np.random.choice(XTest.shape[0], len(XTest), replace=False)
+
+    XTest = XTest[index]
+    ytest = ytest[index]
 
     #  if (bDebug):
     print("Final Training Data = ", XTrain.shape)
@@ -1212,111 +1401,8 @@ def CreateTrainingAndTestData(bNNorClassic,primaryLabel,completeTrainingData,tra
     print("Final Training Label Data = ", ytrain.shape)
     print("Final Test Label Data = ", ytest.shape)
 
+    return XTrain, XTest, ytrain, ytest,labelDict,scaler,labelList,OHE
 
-    return XTrain, XTest, ytrain, ytest,labelDict,scaler,labelList
-
-
-def CreateFullTrainingAndTestData(bNNorClassic,labelList,completeTrainingData,trainingDataSizes):
-
-    finalTrainingData = []
-    datasetLabels = []
-
-    #create labels and scale data
-
-    OHELabels, labelDict = createFullLabels(labelList)
-
-    print("no of datasets = ",len(completeTrainingData))
-    print("labelDict = ",labelDict)
-
-    for dataset in range(len(completeTrainingData)):
-
-        print("length of dataset = ",trainingDataSizes[dataset])
-
-        dataAsArray = TransformTrainingData(completeTrainingData[dataset])
-        print("shape = ",dataAsArray.shape)
-        datasetLabels.append(np.asarray(assignLabelSet(OHELabels[dataset], trainingDataSizes[dataset])))
-
-        finalTrainingData.append(dataAsArray)
-
-    # create the training and test sets
-
-    combinedTrainingSet = []
-    combinedTestSet = []
-    combinedTrainingLabels = []
-    combinedTestLabels = []
-
-    # scale the data
-
-    joinedTrainingData = finalTrainingData[0]
-    for dataset in range(1,len(finalTrainingData)):
-        classTrainingData = finalTrainingData[dataset]
-        joinedTrainingData = np.concatenate((joinedTrainingData,classTrainingData))
-
-    joinedTrainingData,scaler = ScaleInputData(joinedTrainingData)
-
-    #now split back up again
-
-    startPos = 0
-    for dataset in range(len(finalTrainingData)):
-
-        finalTrainingData[dataset] = joinedTrainingData[startPos:startPos+trainingDataSizes[dataset]]
-        startPos = startPos+trainingDataSizes[dataset]
-
-
-    for dataset in range(len(finalTrainingData)):
-        classTrainingData = finalTrainingData[dataset]
-        classLabels = datasetLabels[dataset]
-
-        print("shape of class data = ",classTrainingData.shape)
-        print("shape of class labels = ", classLabels.shape)
-
-
-        numberVectorsInTrainingSet = int(round(classTrainingData.shape[0] * TRAIN_TEST_RATIO))
-        numberVectorsInTestSet = int(round(classTrainingData.shape[0]-numberVectorsInTrainingSet))
-
-        combinedTrainingSet.append(classTrainingData[:numberVectorsInTrainingSet])
-        combinedTrainingLabels.append(classLabels[:numberVectorsInTrainingSet])
-
-        combinedTestSet.append(classTrainingData[numberVectorsInTrainingSet:])
-        combinedTestLabels.append(classLabels[numberVectorsInTrainingSet:])
-
-        print(" no in training set = ",numberVectorsInTrainingSet)
-        print(" no in test set = ", numberVectorsInTestSet)
-
-
-
-    print("no of data sets to combine = ",len(combinedTrainingSet))
-    # now concatenate all training and test sets to create one combined training and test set
-
-    XTrain = combinedTrainingSet[0]
-    XTest = combinedTestSet[0]
-    ytrain = combinedTrainingLabels[0]
-    ytest = combinedTestLabels[0]
-
-
-    for dataset in range(1,len(combinedTrainingSet)):
-
-        XTrain = np.concatenate((XTrain, combinedTrainingSet[dataset]))
-        XTest = np.concatenate((XTest, combinedTestSet[dataset]))
-        ytrain = np.concatenate((ytrain,combinedTrainingLabels[dataset]))
-        ytest = np.concatenate((ytest, combinedTestLabels[dataset]))
-
-    # create an integrated set of training data which includes the transient and the random data
-    # ensure that the sequence numbers are kept to manage the label data
-
-    print("XTrain shape = ",XTrain.shape)
-    print("XTest shape = ", XTest.shape)
-    print("ytrain shape = ", ytrain.shape)
-    print("ytest shape = ", ytest.shape)
-
-
-    if (bNNorClassic):
-        XTrain = np.reshape(XTrain, (XTrain.shape[0], XTrain.shape[1], 1))
-        XTest = np.reshape(XTest, (XTest.shape[0], XTest.shape[1], 1))
-
-
-
-    return XTrain, XTest, ytrain, ytest,labelDict,scaler,labelList
 
 
 
@@ -1423,36 +1509,11 @@ def SaveRandomImageFiles(numberSamples,sourceDir):
 
 
 
-def MultipleClassicModels(XTrain,ytrain,XTest,ytest):
-
-    from sklearn.ensemble import RandomForestClassifier
-    from sklearn.ensemble import VotingClassifier
-    from sklearn.linear_model import LogisticRegression
-    from sklearn.svm import SVC
-    from sklearn.metrics import accuracy_score
-
-
-    logClf = LogisticRegression()
-    rndClf = RandomForestClassifier()
-    svmClf = SVC()
-
-    votingClf = VotingClassifier(
-        estimators=[('lr',logClf),('rf',rndClf),('svc',svmClf)],
-        voting='hard')
-    votingClf.fit(XTrain,ytrain)
-
-    for clf in (logClf,rndClf,svmClf,votingClf):
-        clf.fit(XTrain,ytrain)
-        y_pred = clf.predict(XTest)
-        print(clf.__class__.__name__,accuracy_score(ytest,y_pred))
-
 
 def RandomForestModel(XTrain,ytrain,XTest,ytest):
 
     from sklearn.ensemble import RandomForestClassifier
     from sklearn.metrics import accuracy_score
-
-  #  rndClf = RandomForestClassifier(n_estimators=30,max_depth=9)
 
     rndClf = RandomForestClassifier(n_estimators=30,max_depth=9,min_samples_leaf=15)
 
@@ -1504,6 +1565,58 @@ def SelectDataset():
 
     return dataClass
 
+def GetBinaryLabels(testClass):
+
+
+    if (testClass == DEFAULT_AGN_CLASS):
+
+        otherLabels = [DEFAULT_SEYFERT_CLASS, DEFAULT_BLAZAR_CLASS, DEFAULT_PULSAR_CLASS, DEFAULT_QUASAR_CLASS]
+    elif (testClass == DEFAULT_PULSAR_CLASS):
+
+        otherLabels = [DEFAULT_SEYFERT_CLASS, DEFAULT_BLAZAR_CLASS, DEFAULT_AGN_CLASS, DEFAULT_QUASAR_CLASS]
+
+    elif (testClass == DEFAULT_QUASAR_CLASS):
+
+        otherLabels = [DEFAULT_SEYFERT_CLASS, DEFAULT_BLAZAR_CLASS, DEFAULT_PULSAR_CLASS, DEFAULT_AGN_CLASS]
+    elif (testClass == DEFAULT_BLAZAR_CLASS):
+        otherLabels = [DEFAULT_SEYFERT_CLASS, DEFAULT_AGN_CLASS, DEFAULT_PULSAR_CLASS, DEFAULT_QUASAR_CLASS]
+
+    elif (testClass == DEFAULT_SEYFERT_CLASS):
+
+        otherLabels = [DEFAULT_AGN_CLASS, DEFAULT_BLAZAR_CLASS, DEFAULT_PULSAR_CLASS, DEFAULT_QUASAR_CLASS]
+
+
+    return otherLabels
+
+
+def ChooseDataSetsToTest():
+
+    bCorrectInput=False
+
+    choiceList = ["AGN(A)","SEYFERT(S)","BLAZAR(B)", "QUASAR(Q)", "PULSAR (P)"]
+
+    while (bCorrectInput==False):
+        strr = 'Select '+choiceList[0]+', '+choiceList[1]+', '+choiceList[2]+', '+choiceList[3]+', '+choiceList[4]+' : '
+        classData = input(strr)
+        classData= classData.upper()
+        bCorrectInput=True
+        if (classData == AGN_DATA_SELECTED):
+            classLabel = DEFAULT_AGN_CLASS
+        elif (classData == SEYFERT_DATA_SELECTED):
+            classLabel = DEFAULT_SEYFERT_CLASS
+        elif (classData == BLAZAR_DATA_SELECTED):
+            classLabel = DEFAULT_BLAZAR_CLASS
+        elif (classData == PULSAR_DATA_SELECTED):
+            classLabel = DEFAULT_PULSAR_CLASS
+        elif (classData == QUASAR_DATA_SELECTED):
+            classLabel = DEFAULT_QUASAR_CLASS
+
+        else:
+            print("Invalid Input - try again")
+            bCorrectInput=False
+
+    return classLabel
+
 def GetSelectedBinaryDataSets():
 
     classLabels= []
@@ -1511,38 +1624,42 @@ def GetSelectedBinaryDataSets():
     otherLabels = []
 
     choiceList = ["AGN(A)","SEYFERT(S)","BLAZAR(B)", "QUASAR(Q)", "PULSAR (P)"]
+ #   choiceList = ["SEYFERT(S)","BLAZAR(B)", "QUASAR(Q)", "PULSAR (P)"]
 
     dataClass = SelectDataset()
 
     while (bCorrectInput==False):
         strr = 'Select '+choiceList[0]+', '+choiceList[1]+', '+choiceList[2]+', '+choiceList[3]+', '+choiceList[4]+' : '
+    #    strr = 'Select '+choiceList[0]+', '+choiceList[1]+', '+choiceList[2]+', '+choiceList[3]+' : '
         classData = input(strr)
         classData= classData.upper()
         if (classData == AGN_DATA_SELECTED):
-
             classLabels.append(DEFAULT_AGN_CLASS)
-
             otherLabels = [DEFAULT_SEYFERT_CLASS,DEFAULT_BLAZAR_CLASS,DEFAULT_PULSAR_CLASS,DEFAULT_QUASAR_CLASS]
             bCorrectInput = True
         elif (classData == SEYFERT_DATA_SELECTED):
 
             classLabels.append(DEFAULT_SEYFERT_CLASS)
             otherLabels = [DEFAULT_AGN_CLASS, DEFAULT_BLAZAR_CLASS, DEFAULT_PULSAR_CLASS,DEFAULT_QUASAR_CLASS]
+       #     otherLabels = [ DEFAULT_BLAZAR_CLASS, DEFAULT_PULSAR_CLASS,DEFAULT_QUASAR_CLASS]
             bCorrectInput = True
         elif (classData == BLAZAR_DATA_SELECTED):
             classLabels.append(DEFAULT_BLAZAR_CLASS)
             otherLabels = [DEFAULT_SEYFERT_CLASS, DEFAULT_AGN_CLASS, DEFAULT_PULSAR_CLASS,DEFAULT_QUASAR_CLASS]
+        #    otherLabels = [DEFAULT_SEYFERT_CLASS, DEFAULT_PULSAR_CLASS,DEFAULT_QUASAR_CLASS]
             bCorrectInput = True
         elif (classData == QUASAR_DATA_SELECTED):
 
             classLabels.append(DEFAULT_QUASAR_CLASS)
             otherLabels = [DEFAULT_SEYFERT_CLASS, DEFAULT_BLAZAR_CLASS, DEFAULT_PULSAR_CLASS,DEFAULT_AGN_CLASS]
+        #    otherLabels = [DEFAULT_SEYFERT_CLASS, DEFAULT_BLAZAR_CLASS, DEFAULT_PULSAR_CLASS]
             bCorrectInput = True
 
         elif (classData == PULSAR_DATA_SELECTED):
 
             classLabels.append(DEFAULT_PULSAR_CLASS)
             otherLabels= [DEFAULT_SEYFERT_CLASS, DEFAULT_BLAZAR_CLASS, DEFAULT_AGN_CLASS,DEFAULT_QUASAR_CLASS]
+        #    otherLabels= [DEFAULT_SEYFERT_CLASS, DEFAULT_BLAZAR_CLASS,DEFAULT_QUASAR_CLASS]
             bCorrectInput = True
         else:
             bCorrectInput = False
@@ -1570,14 +1687,19 @@ def GetOperationMode():
 
 
     while (bCorrectInput == False):
-        selectedOperation= input("Select Build Full Model (F) or Build Binary Models (B) Test Existing Model (T)  or Soak Test Models  (S): ")
-        selectedOperation = selectedOperation.upper()
-        if (selectedOperation == OP_BUILD_FULL_MODEL) or (selectedOperation == OP_BUILD_BINARY_MODELS) or (selectedOperation == OP_TEST_MODEL) or (selectedOperation == OP_TEST_SOAK):
+        print("1:  Build Multi-Classifier Models")
+        print("2:  Build Binary Models")
+        print("3:  Test Existing Models")
+        print("4:  Blind Test Models")
+
+        selOP = input("Select Operation:")
+        if (selOP == OP_BUILD_FULL_MODEL) or (selOP == OP_BUILD_BINARY_MODELS) or (selOP == OP_TEST_MODEL) or (selOP == OP_TEST_BLIND):
             bCorrectInput = True
         else:
             print("*** Incorrect Input - try again ***")
 
-    return selectedOperation
+    return selOP
+
 
 
 
@@ -1691,7 +1813,7 @@ def TestRawRandomSamples(labelDict,model,randomSamples,sampleLabels,dataScaler):
     return rawTestSamples,sampleLabels
 
 
-def TestRawSample(labelDict,model,sampleData,sampleLabel,dataScaler):
+def TestRawSample(labelDict,model,sampleData,dataScaler):
 
 
     dataAsArray = np.asarray(sampleData)
@@ -1788,7 +1910,7 @@ def ConvertClassTypeToClassValue(classType):
 
 
 
-def ExecuteSavedBinaryModel(testData, finalBinaryModelDict, classType1, classType2,testClass, modelList, dictList,scalerList):
+def ExecuteSavedBinaryModel(testData, finalBinaryModelDict, classType1, classType2, modelList, dictList,scalerList):
 
 
 
@@ -1798,14 +1920,11 @@ def ExecuteSavedBinaryModel(testData, finalBinaryModelDict, classType1, classTyp
 
     modelName = classValue1 + classValue2
 
-
     if (modelName in finalBinaryModelDict):
         modelNo = finalBinaryModelDict[modelName]
 
-
         bDetection, predictedLabel, finalProbability = TestRawSample(dictList[modelNo], modelList[modelNo],
                                                                      testData,
-                                                                     testClass,
                                                                      scalerList[modelNo])
 
     else:
@@ -1814,33 +1933,50 @@ def ExecuteSavedBinaryModel(testData, finalBinaryModelDict, classType1, classTyp
 
     return bDetection,predictedLabel,finalProbability
 
-def ProcessFullBinaryModels():
+def LoadMultiClassModels(dataset):
     import os
 
     models = []
     dicts = []
     scalers = []
+    encoders = []
+
     finalBinaryModelDict = {}
 
     print("*** Building Full Binary Model Dictionary ***")
-    bValidData, modelList, dictList, scalerList = ScanForModels(DEFAULT_FULL_BINARY_MODELS_LOCATION)
+
+    if (dataset == DEFAULT_NVSS_DATASET):
+        modelLocation =NVSS_FULL_BINARY_MODELS_LOCATION
+    elif (dataset == DEFAULT_VAST_DATASET):
+        modelLocation = VAST_FULL_BINARY_MODELS_LOCATION
+    else:
+        print("*** UNKNOWN DAT SET To extract Models ***")
+        sys.exit()
+    bValidData, modelList, dictList, scalerList,encoderList = ScanForModels(modelLocation)
 
     if (bValidData):
 
         print("*** Total No Models = " + str(len(modelList)) + " ***")
         for entry in range(len(modelList)):
-            model = GetSavedModel(DEFAULT_FULL_BINARY_MODELS_LOCATION, modelList[entry])
-            bDictOK,dict = GetSavedDict(DEFAULT_FULL_BINARY_MODELS_LOCATION, modelList[entry])
+            model = GetSavedModel(modelLocation, modelList[entry])
+            bDictOK,dict = GetSavedDict(modelLocation, modelList[entry])
             if (bDictOK):
                 dicts.append(dict)
             else:
                 print("*** FAILED TO LOAD FULL BINARY DICT ***")
                 sys.exit()
 
-            scaler = GetSavedScaler(DEFAULT_FULL_BINARY_MODELS_LOCATION, modelList[entry])
+            scaler = GetSavedScaler(modelLocation, modelList[entry])
+            encoder = GetSavedEncoder(modelLocation, modelList[entry])
 
             models.append(model)
             scalers.append(scaler)
+            encoders.append(encoder)
+
+    else:
+        print("*** No FULL BINARY Models Could Be Found ***")
+        sys.exit()
+
 
     for entry in range(len(modelList)):
         rootExt = os.path.splitext(modelList[entry])
@@ -1850,7 +1986,7 @@ def ProcessFullBinaryModels():
         finalBinaryModelDict[modelParams[1] + modelParams[2]] = entry
         finalBinaryModelDict[modelParams[2] + modelParams[1]] = entry
 
-    return finalBinaryModelDict, models, dicts, scalers
+    return finalBinaryModelDict, models, dicts, scalers,encoders
 
 
 def TestForAlternatives(fOutputFile,testData,testDataDetails,dictNo,dictList,testModelList,testClass,scalerList,classList,finalBinaryModelDict, fullModelList, fullDictList, fullScalerList):
@@ -1861,7 +1997,7 @@ def TestForAlternatives(fOutputFile,testData,testDataDetails,dictNo,dictList,tes
     TN = 0
     FP = 0
     FN = 0
-
+    numberAltFN = 0
 
 
     numberChangedPredictions = 0
@@ -1870,18 +2006,19 @@ def TestForAlternatives(fOutputFile,testData,testDataDetails,dictNo,dictList,tes
 
         noPossibilities = 0
         bChangedPrediction = False
+        bFalseNegative=False
 
         sourceNo = testDataDetails[dataEntry]
         StoreHeaderInFile(fOutputFile, sourceNo, testClass, testClass)
 
         bDetection, predictedLabel, finalProbability = TestRawSample(dictList[dictNo], testModelList[dictNo],
                                                                       testData[dataEntry],
-                                                                      testClass,
                                                                       scalerList[dictNo])
 
         if (bDetection):
 
             StoreModelResultsInFile(fOutputFile,sourceNo, testClass, testClass, predictedLabel, finalProbability)
+
 
             if (predictedLabel==testClass):
                 noPossibilities+=1
@@ -1889,6 +2026,7 @@ def TestForAlternatives(fOutputFile,testData,testDataDetails,dictNo,dictList,tes
                 probCorrectPrediction = finalProbability
                 outcomeProbability = finalProbability
                 outcomeClass = testClass
+                bFalseNegative = False
 
             else:
 
@@ -1896,6 +2034,7 @@ def TestForAlternatives(fOutputFile,testData,testDataDetails,dictNo,dictList,tes
                 outcomeClass = predictedLabel
                 outcomeProbability = finalProbability
                 probCorrectPrediction = 0
+                bFalseNegative=True
         else:
             print("*** INVALID RESULT ***")
             sys.exit()
@@ -1906,7 +2045,6 @@ def TestForAlternatives(fOutputFile,testData,testDataDetails,dictNo,dictList,tes
 
                 bDetection, predictedLabel,finalProbability = TestRawSample(dictList[modelNo], testModelList[modelNo],
                                                                             testData[dataEntry],
-                                                                            testClass,
                                                                             scalerList[modelNo])
 
 
@@ -1921,6 +2059,7 @@ def TestForAlternatives(fOutputFile,testData,testDataDetails,dictNo,dictList,tes
                         # this is where an alternative other than 'other' has been identified
 
                         if (finalProbability > probCorrectPrediction):
+
                             # this is a stronger candidate
 
                             outcomeProbability = finalProbability
@@ -1930,7 +2069,7 @@ def TestForAlternatives(fOutputFile,testData,testDataDetails,dictNo,dictList,tes
                             # can we determine most likely of these candidates ?
                             if (bLoadFullBinaryModels):
                                 bFullDetection, fullPredLabel, fullPredProb = ExecuteSavedBinaryModel(testData[dataEntry], finalBinaryModelDict, testClass,outcomeClass,
-                                                                                testClass, fullModelList, fullDictList, fullScalerList)
+                                                                                fullModelList, fullDictList, fullScalerList)
 
                                 if (bFullDetection):
                                     if (fullPredLabel != testClass):
@@ -1939,9 +2078,16 @@ def TestForAlternatives(fOutputFile,testData,testDataDetails,dictNo,dictList,tes
 
                                         FP += 1
                                     else:
+                                        # it is detecting our test class
 
                                         numberChangedPredictions += 1
                                         bChangedPrediction=True
+
+                                        #### TEST !
+                                        if (bReduceFalseNegatives) and (bFalseNegative):
+                                            FN -= 1
+
+
 
 
                             else:
@@ -1958,6 +2104,527 @@ def TestForAlternatives(fOutputFile,testData,testDataDetails,dictNo,dictList,tes
 
     return testPossibilities,TP,FN,FP,TN,numberChangedPredictions
 
+
+
+def findResultantClass(probability,predictionProbabilities,predictionModels,classList):
+
+    index = predictionProbabilities.index(probability)
+    modelNo = predictionModels[index]
+    return classList[modelNo]
+
+def CalculateMeanValue(dataSample):
+    import statistics
+
+    bStatsCheckOK = False
+
+    meanValue = statistics.mean(dataSample[0])
+
+    return meanValue
+
+
+def TestAgainstStats(dataSample, mean, stdev):
+    import statistics
+
+    bStatsCheckOK = False
+
+    meanValue = statistics.mean(dataSample[0])
+
+    if ((meanValue >= mean - stdev) and (meanValue <= mean + stdev)):
+        bStatsCheckOK = True
+
+    return bStatsCheckOK
+
+
+def TestImageAgainstStats(numberPosStatSuccess,numberPosStatFailures,dataSample,classMean,classStdev):
+
+    numberPosStatS = numberPosStatSuccess
+    numberPosStatF = numberPosStatFailures
+
+    bCheckStats = TestAgainstStats(dataSample, classMean, classStdev)
+    if (bCheckStats):
+        numberPosStatS += 1
+    else:
+        numberPosStatF += 1
+
+    return numberPosStatS, numberPosStatF
+
+
+def ConvertToClassLabel(possibleClasses):
+
+
+
+    classes = []
+    for i in range(len(possibleClasses)):
+        if (possibleClasses[i]== AGN_DATA_SELECTED):
+            classes.append(DEFAULT_AGN_CLASS)
+        elif (possibleClasses[i]== PULSAR_DATA_SELECTED):
+            classes.append(DEFAULT_PULSAR_CLASS)
+        elif (possibleClasses[i]== BLAZAR_DATA_SELECTED):
+            classes.append(DEFAULT_BLAZAR_CLASS)
+        elif (possibleClasses[i] == SEYFERT_DATA_SELECTED):
+            classes.append(DEFAULT_SEYFERT_CLASS)
+        elif (possibleClasses[i] == QUASAR_DATA_SELECTED):
+            classes.append(DEFAULT_QUASAR_CLASS)
+
+
+    return classes[0],classes[1]
+
+
+def TestIndividualSampleSet(fOutputFile,testData,testDataDetails,dictNo,dictList,testModelList,testClass,scalerList,classList,finalBinaryModelDict, fullModelList,
+                            fullDictList, fullScalerList,meanDict,stddevDict):
+
+    TP = 0
+    FN = 0
+
+    numberNegStatSuccess = 0
+    numberNegStatFailures = 0
+    numberPosStatSuccess = 0
+    numberPosStatFailures = 0
+
+    StatDict = {}
+    StatDict['POSSUCC'] = 0
+    StatDict['NEGSUCC'] = 0
+    StatDict['POSFAIL'] = 0
+    StatDict['NEGFAIL'] = 0
+
+    TPDict= {}
+
+    TPDict['TPCase1'] =0
+    TPDict['TPCase2'] = 0
+    TPDict['TPCase3'] = 0
+    TPDict['TPCase4'] = 0
+    TPDict['TPCase5'] = 0
+
+    TPDict['FNCase1'] = 0
+    TPDict['FNCase2'] = 0
+    TPDict['FNCase3'] = 0
+    TPDict['FNCase4'] = 0
+    TPDict['FNCase5'] = 0
+
+
+
+    for dataEntry in range(len(testData)):
+
+        truePredictionProbabilities = []
+        truePredictionModels = []
+        truePredictionLabels = []
+
+        otherPredictionProbabilities = []
+        otherPredictionModels = []
+
+        for modelNo in range(len(testModelList)):
+
+            bDetection, predictedLabel,thisProbability = TestRawSample(dictList[modelNo], testModelList[modelNo],
+                                                                            testData[dataEntry],
+                                                                            scalerList[modelNo])
+
+
+            if (bDetection == True):
+
+                if (predictedLabel != DEFAULT_OTHER_CLASS):
+
+                    truePredictionProbabilities.append(thisProbability)
+                    truePredictionLabels.append(predictedLabel)
+                    truePredictionModels.append(modelNo)
+                else:
+                    otherPredictionProbabilities.append(thisProbability)
+                    otherPredictionModels.append(modelNo)
+
+            else:
+                print("INVALID Prediction")
+                sys.exit()
+
+
+
+        numberTruePredictions = len(truePredictionProbabilities)
+        numberOtherPredictions = len(otherPredictionProbabilities)
+
+        if (numberTruePredictions>0):
+            sortedTruePredictionProbabilities = sorted(truePredictionProbabilities, reverse=True)
+        else:
+            sortedTruePredictionProbabilities = truePredictionProbabilities
+        if (numberOtherPredictions > 0):
+            sortedOtherPredictionProbabilities = sorted(otherPredictionProbabilities)
+        else:
+            sortedOtherPredictionProbabilities =otherPredictionProbabilities
+
+        if (numberTruePredictions==1):
+
+            if (truePredictionLabels[0] == testClass):
+
+                # ok - it has predicted the right class
+
+                TP += 1
+
+                TPDict['TPCase1'] += 1
+
+                # now check the stats
+
+                numberPosStatSuccess,numberPosStatFailures = TestImageAgainstStats(numberPosStatSuccess,numberPosStatFailures,testData[dataEntry],
+                                                                                   meanDict[testClass],stddevDict[testClass])
+
+
+
+            else:
+
+
+                possibleClass1 = findResultantClass(sortedTruePredictionProbabilities[0], truePredictionProbabilities,
+                                                    truePredictionModels, classList)
+                possibleClass2 = findResultantClass(sortedOtherPredictionProbabilities[0], otherPredictionProbabilities,
+                                                    otherPredictionModels, classList)
+
+
+                bFullDetection, fullPredLabel, fullPredProb = ExecuteSavedBinaryModel(testData[dataEntry],
+                                                                                      finalBinaryModelDict,
+                                                                                      possibleClass1, possibleClass2,
+                                                                                      fullModelList,
+                                                                                      fullDictList, fullScalerList)
+
+                if (bFullDetection):
+
+                    if (fullPredLabel == testClass):
+
+                        TPDict['TPCase2'] += 1
+
+                        TP +=1
+
+
+                        numberPosStatSuccess, numberPosStatFailures = TestImageAgainstStats(numberPosStatSuccess,
+                                                                                            numberPosStatFailures,
+                                                                                            testData[dataEntry],
+                                                                                            meanDict[testClass],
+                                                                                            stddevDict[testClass])
+
+
+                    else:
+
+                        TPDict['FNCase2'] += 1
+                        FN +=1
+
+                        numberNegStatSuccess, numberNegStatFailures = TestImageAgainstStats(numberNegStatSuccess,
+                                                                                        numberNegStatFailures,
+                                                                                        testData[dataEntry],
+                                                                                        meanDict[fullPredLabel],
+                                                                                        stddevDict[fullPredLabel])
+
+
+                else:
+                    print("FAILED TO GET A PREDICTION")
+                    sys.exit()
+
+
+
+        elif (numberTruePredictions >= 2):
+
+            if (bTakeTop2Models):
+
+
+                possibleClass1 = findResultantClass(sortedTruePredictionProbabilities[0], truePredictionProbabilities,
+                                                          truePredictionModels, classList)
+                possibleClass2 = findResultantClass(sortedTruePredictionProbabilities[1], truePredictionProbabilities,
+                                                          truePredictionModels, classList)
+
+                bFullDetection, fullPredLabel, fullPredProb = ExecuteSavedBinaryModel(testData[dataEntry],
+                                                                                  finalBinaryModelDict,
+                                                                                  possibleClass1, possibleClass2,
+                                                                                  fullModelList,
+                                                                                  fullDictList, fullScalerList)
+
+                if (bFullDetection):
+
+                    if (fullPredLabel==testClass):
+                        TP +=1
+
+                        TPDict['TPCase3'] += 1
+
+                        numberPosStatSuccess, numberPosStatFailures = TestImageAgainstStats(numberPosStatSuccess,
+                                                                                            numberPosStatFailures,
+                                                                                            testData[dataEntry],
+                                                                                            meanDict[testClass],
+                                                                                            stddevDict[testClass])
+
+
+                    else:
+                        FN +=1
+
+                        TPDict['FNCase3'] += 1
+
+                        numberNegStatSuccess, numberNegStatFailures = TestImageAgainstStats(numberNegStatSuccess,
+                                                                                            numberNegStatFailures,
+                                                                                            testData[dataEntry],
+                                                                                            meanDict[fullPredLabel],
+                                                                                            stddevDict[fullPredLabel])
+
+
+                else:
+
+                    print("FAILED TO GET A PREDICTION")
+                    sys.exit()
+
+            else:
+
+
+                allPossibleClasses = GenerateListOfPairsToTest(truePredictionLabels)
+                possibleClasses = list(allPossibleClasses.keys())
+
+
+                predLabelsList = []
+                predProbList = []
+
+                for classPair in range(len(possibleClasses)):
+
+                        possibleClass1,possibleClass2 = ConvertToClassLabel(possibleClasses[classPair])
+
+                        bFullDetection, fullPredLabel, fullPredProb = ExecuteSavedBinaryModel(testData[dataEntry],
+                                                                                          finalBinaryModelDict,
+                                                                                          possibleClass1, possibleClass2,
+                                                                                          fullModelList,
+                                                                                          fullDictList, fullScalerList)
+
+                        if (bFullDetection):
+
+                            # add to a list
+
+                            predLabelsList.append(fullPredLabel)
+                            predProbList.append(fullPredProb)
+
+                        else:
+                            print("FAILED TO GET A PREDICTION")
+                            sys.exit()
+
+                if (len(predProbList) >0):
+
+                    # we have a potential result - find the highest probability and its corresponding label
+
+                    highestProb = max(predProbList)
+
+                    highestClassIndex = predProbList.index(highestProb)
+                    highestClass = predLabelsList[highestClassIndex]
+                    if (highestClass==testClass):
+
+                        TP+=1
+                        StatDict['TPCase4'] += 1
+
+                        numberPosStatSuccess, numberPosStatFailures = TestImageAgainstStats(numberPosStatSuccess,
+                                                                                            numberPosStatFailures,
+                                                                                            testData[dataEntry],
+                                                                                            meanDict[testClass],
+                                                                                            stddevDict[testClass])
+
+                    else:
+                        FN +=1
+                        StatDict['FNCase4'] += 1
+
+
+                        numberNegStatSuccess, numberNegStatFailures = TestImageAgainstStats(numberNegStatSuccess,
+                                                                                            numberNegStatFailures,
+                                                                                            testData[dataEntry],
+                                                                                            meanDict[fullPredLabel],
+                                                                                            stddevDict[fullPredLabel])
+
+        elif ((numberTruePredictions==0) and (numberOtherPredictions>0)):
+
+            possibleClass1 = findResultantClass(sortedOtherPredictionProbabilities[0],otherPredictionProbabilities,otherPredictionModels,classList)
+
+            possibleClass2 = findResultantClass(sortedOtherPredictionProbabilities[1],otherPredictionProbabilities,otherPredictionModels,classList)
+
+            bFullDetection, fullPredLabel, fullPredProb = ExecuteSavedBinaryModel(testData[dataEntry],
+                                                                                  finalBinaryModelDict,
+                                                                                  possibleClass1, possibleClass2,
+                                                                                  fullModelList,
+                                                                                  fullDictList, fullScalerList)
+
+            if (bFullDetection):
+                if (fullPredLabel == testClass):
+
+                    # ok - it has predicted the right class
+
+                    TP += 1
+                    TPDict['TPCase5'] += 1
+
+
+                    numberPosStatSuccess, numberPosStatFailures = TestImageAgainstStats(numberPosStatSuccess,
+                                                                                        numberPosStatFailures,
+                                                                                        testData[dataEntry],
+                                                                                        meanDict[testClass],
+                                                                                        stddevDict[testClass])
+
+
+                else:
+
+                    FN += 1
+
+                    TPDict['FNCase5'] += 1
+
+                    numberNegStatSuccess, numberNegStatFailures = TestImageAgainstStats(numberNegStatSuccess,
+                                                                                    numberNegStatFailures,
+                                                                                    testData[dataEntry],
+                                                                                    meanDict[fullPredLabel],
+                                                                                    stddevDict[fullPredLabel])
+
+
+            else:
+                print("FAILED TO GET A PREDICTION")
+                sys.exit()
+
+        else:
+            print("NO TRUE OR OTHER PREDICTIONS ")
+            sys.exit()
+
+        truePredictionProbabilities.clear()
+        truePredictionModels.clear()
+        truePredictionLabels.clear()
+
+        otherPredictionProbabilities.clear()
+        otherPredictionModels.clear()
+
+    print("For test class = " + testClass + " TP = " + str(TP) + ", FN = " + str(FN))
+    print("Total No Samples tested = ",str(len(testData)))
+    accuracy = round((TP/len(testData)),2)
+    print("Accuracy = ",str(accuracy))
+
+    StatDict['POSSUCC'] =numberPosStatSuccess
+    StatDict['POSFAIL'] =numberPosStatFailures
+    StatDict['NEGSUCC']= numberNegStatSuccess
+    StatDict['NEGFAIL'] =numberNegStatFailures
+
+
+    print("No Pos Stat Success = ",str(StatDict['POSSUCC']))
+    print("No Pos Stat Failures = ",str(StatDict['POSFAIL']))
+    print("No Neg Stat Success = ", str(StatDict['NEGSUCC']))
+    print("No Neg Stat Failures = ",str(StatDict['NEGFAIL']))
+
+    print("No TP (Case 1) = ", str(TPDict['TPCase1']))
+    print("No TP (Case 2) = ", str(TPDict['TPCase2']))
+    print("No TP (Case 3) = ", str(TPDict['TPCase3']))
+    print("No TP (Case 4) = ", str(TPDict['TPCase4']))
+    print("No TP (Case 5) = ", str(TPDict['TPCase5']))
+
+    print("No FN (Case 1) = ", str(TPDict['FNCase1']))
+    print("No FN (Case 2) = ", str(TPDict['FNCase2']))
+    print("No FN (Case 3) = ", str(TPDict['FNCase3']))
+    print("No FN (Case 4) = ", str(TPDict['FNCase4']))
+    print("No FN (Case 5) = ", str(TPDict['FNCase5']))
+
+    return TP, FN,StatDict,TPDict
+
+def ClassifyAnImage(testData,dictList,testModelList,scalerList,classList,finalBinaryModelDict, fullModelList,fullDictList, fullScalerList):
+
+
+
+    truePredictionProbabilities = []
+    truePredictionModels = []
+    truePredictionLabels = []
+
+    otherPredictionProbabilities = []
+    otherPredictionModels = []
+
+    for modelNo in range(len(testModelList)):
+
+        bDetection, predictedLabel,thisProbability = TestRawSample(dictList[modelNo], testModelList[modelNo],
+                                                                            testData,
+                                                                            scalerList[modelNo])
+
+
+        if (bDetection == True):
+
+            if (predictedLabel != DEFAULT_OTHER_CLASS):
+
+                truePredictionProbabilities.append(thisProbability)
+                truePredictionLabels.append(predictedLabel)
+                truePredictionModels.append(modelNo)
+            else:
+                otherPredictionProbabilities.append(thisProbability)
+                otherPredictionModels.append(modelNo)
+
+        else:
+            print("INVALID Prediction")
+            sys.exit()
+
+
+
+    numberTruePredictions = len(truePredictionProbabilities)
+    numberOtherPredictions = len(otherPredictionProbabilities)
+
+    if (numberTruePredictions>0):
+        sortedTruePredictionProbabilities = sorted(truePredictionProbabilities, reverse=True)
+    else:
+        sortedTruePredictionProbabilities = truePredictionProbabilities
+    if (numberOtherPredictions > 0):
+        sortedOtherPredictionProbabilities = sorted(otherPredictionProbabilities)
+    else:
+        sortedOtherPredictionProbabilities =otherPredictionProbabilities
+
+    if (numberTruePredictions==1):
+        print("*** ONE Prediction Only ***")
+        identifiedClass =truePredictionLabels[0]
+        transientProb = sortedTruePredictionProbabilities[0]
+        possibleClass = 0
+    elif (numberTruePredictions >= 2):
+
+        print("*** TWO or MORE Predictions ***")
+        possibleClass1 = findResultantClass(sortedTruePredictionProbabilities[0], truePredictionProbabilities,
+                                                          truePredictionModels, classList)
+        possibleClass2 = findResultantClass(sortedTruePredictionProbabilities[1], truePredictionProbabilities,
+                                                          truePredictionModels, classList)
+
+        bFullDetection, fullPredLabel, fullPredProb = ExecuteSavedBinaryModel(testData,
+                                                                                  finalBinaryModelDict,
+                                                                                  possibleClass1, possibleClass2,
+                                                                                  fullModelList,
+                                                                                  fullDictList, fullScalerList)
+
+        if (bFullDetection):
+
+            identifiedClass = fullPredLabel
+            if (fullPredLabel==possibleClass1):
+                possibleClass = possibleClass2
+            else:
+                possibleClass = possibleClass1
+            transientProb = fullPredProb
+
+        else:
+
+            print("FAILED TO GET A PREDICTION")
+            sys.exit()
+
+
+    elif ((numberTruePredictions==0) and (numberOtherPredictions>0)):
+
+        print("*** NO TRUE Predictions ***")
+
+        possibleClass1 = findResultantClass(sortedOtherPredictionProbabilities[0],otherPredictionProbabilities,otherPredictionModels,classList)
+
+        possibleClass2 = findResultantClass(sortedOtherPredictionProbabilities[1],otherPredictionProbabilities,otherPredictionModels,classList)
+
+        bFullDetection, fullPredLabel, fullPredProb = ExecuteSavedBinaryModel(testData,
+                                                                                  finalBinaryModelDict,
+                                                                                  possibleClass1, possibleClass2,
+                                                                                  fullModelList,
+                                                                                  fullDictList, fullScalerList)
+
+        if (bFullDetection):
+
+            identifiedClass = fullPredLabel
+            transientProb = fullPredProb
+            if (fullPredLabel==possibleClass1):
+                possibleClass = possibleClass2
+            else:
+                possibleClass = possibleClass1
+
+        else:
+            print("FAILED TO GET A PREDICTION")
+            sys.exit()
+
+    else:
+        print("NO TRUE OR OTHER PREDICTIONS ")
+        sys.exit()
+
+
+    return identifiedClass,transientProb,possibleClass
+
+
+
 def SoakTestFullModel(testData,model,testClass,scaler,labelDict):
 
 
@@ -1970,7 +2637,6 @@ def SoakTestFullModel(testData,model,testClass,scaler,labelDict):
 
         bDetection, predictedLabel, finalProbability = TestRawSample(labelDict, model,
                                                                       testData[dataEntry],
-                                                                      testClass,
                                                                       scaler)
 
         if (bDetection):
@@ -1995,6 +2661,41 @@ def OpenTestResultsFile():
 
     return f
 
+def OpenNVSSTestResultsFile():
+
+    f = open(DEFAULT_VAST_RANDOM_FILE_TEST_LOCATION + 'NVSSTestResults.txt','w')
+    if not (f):
+        print("*** Unable to open NVSS test results file ***")
+        sys.exit()
+
+    return f
+
+def OpenBlindTestSummaryFile(dataset):
+
+    f = open(DEFAULT_VAST_RANDOM_FILE_TEST_LOCATION + 'BlindTestResults.txt','w')
+    if not (f):
+        print("*** Unable to open blind test results file ***")
+        sys.exit()
+    else:
+        f.write('BLIND TEST RESULTS FOR DATASET :'+dataset)
+        f.write('\n\n')
+
+
+    return f
+
+def OpenNVSSTestSummaryFile():
+
+    f = open(DEFAULT_VAST_RANDOM_FILE_TEST_LOCATION + 'NVSSTestSummary.txt','w')
+    if not (f):
+        print("*** Unable to open NVSS test summary file ***")
+        sys.exit()
+    else:
+        f.write('**** TEST SUMMARY FOR NVSS CATALOG SAMPLES ****')
+        f.write('\n\n')
+
+
+    return f
+
 def OpenTestSummaryFile():
 
     f = open(DEFAULT_VAST_RANDOM_FILE_TEST_LOCATION + 'RandomTestSummary.txt','w')
@@ -2004,6 +2705,12 @@ def OpenTestSummaryFile():
         f.write('FN =>  A samples model did not correctly detect a sample e.g. AGN model with AGN data (INCORRECT)\n')
         f.write('FP => An Alternative Model Tested Positive to this sample with a GREATER probability than the TP case (INCORRECT)\n')
         f.write('TN => An Alternative Model Tested Negative to this sample (CORRECT)\n\n')
+
+
+        if (bReduceFalseNegatives):
+            f.write('REDUCE FALSE NEGATIVES = TRUE\n')
+        else:
+            f.write('REDUCE FALSE NEGATIVES = FALSE\n')
 
     else:
         print("*** Unable to open test results summary file ***")
@@ -2025,6 +2732,21 @@ def  StoreOutcomeInFile(f,outcomeClass,outcomeProbability,bChangedPrediction):
 
         f.write('\n\n')
 
+def StoreNVSSTestResults(f, imageNo, transientClass,transientProb,possibleClass):
+
+    if (f):
+        f.write(str(imageNo))
+        f.write(',')
+        f.write(transientClass)
+        f.write(',')
+        f.write(str(round(transientProb,4)))
+        if (possibleClass != 0):
+            f.write(', Possible = '+possibleClass)
+        f.write('\n')
+
+    else:
+        print("*** INVALID File Handle For NVSS Test results ***")
+        sys.exit()
 
 def StoreHeaderInFile(f,sourceNo,trueClass,testModel):
 
@@ -2100,23 +2822,106 @@ def StoreResultsInFile(f,sourceNo,trueClass,dictResults,rankDict):
 
 
 def  StoreSummaryResults(f, testClass,numberSamples,TP,FN,FP,TN,NC):
-    MAX_NUMBER_MODELS = 5
+
 
     if (f):
         classAccuracy = round((TP/(TP+FN)),2)
-        otherModelAccuracy = round(TN/((MAX_NUMBER_MODELS-1)*numberSamples),2)
+        nullAccuracy = round(TN/((MAX_NUMBER_MODELS-1)*numberSamples),2)
         f.write("**** True Class : ")
         f.write(testClass+' ****')
         f.write('\n')
         f.write("Number of Samples Tested: "+str(numberSamples)+' = (TP+FN)')
         f.write('\n\n')
-        f.write('TP =  '+str(TP)+' TN =  '+str(TN)+' FP =  '+str(FP)+' FN =  '+str(FN)+' Class Accuracy = '+str(classAccuracy)+' Other Accuracy = '+str(otherModelAccuracy))
+        f.write('TP =  '+str(TP)+', TARGET = '+str(numberSamples)+' FN =  '+str(FN)+', TARGET = 0'+' Class Accuracy = '+str(classAccuracy))
+        f.write('\n')
+        f.write('TN =  '+str(TN)+', TARGET = '+str(int(MAX_NUMBER_MODELS-1)*numberSamples)+' FP =  '+str(FP)+', TARGET = 0'+' NULL Accuracy = '+str(nullAccuracy))
         f.write('\n')
         f.write('No Changed Predictions = '+str(NC)+' (Reduces FP)')
+        f.write('\n')
+        f.write('NOTE: TN TARGET = Changed Predictions+TN+FP = '+str(NC+TN+FP))
         f.write('\n\n')
     else:
         print("*** Invalid File Handle For results File ***")
         sys.exit()
+
+
+def  StoreBlindTestSummaryResults(f, testClass,numberSamples,TP,FN,StatsDict,TPDict):
+
+    PosSucc= StatsDict['POSSUCC']
+    PosFail=StatsDict['POSFAIL']
+    NegSucc=StatsDict['NEGSUCC']
+    NegFail=StatsDict['NEGFAIL']
+
+    TP1 = TPDict['TPCase1']
+    TP2 = TPDict['TPCase2']
+    TP3 = TPDict['TPCase3']
+    TP4 = TPDict['TPCase4']
+    TP5 = TPDict['TPCase5']
+
+    FN1 = TPDict['FNCase1']
+    FN2 = TPDict['FNCase2']
+    FN3 = TPDict['FNCase3']
+    FN4 = TPDict['FNCase4']
+    FN5 = TPDict['FNCase5']
+
+    accuracy = round((TP/numberSamples),2)
+    if (f):
+        f.write("**** True Class : ")
+        f.write(testClass+' ****')
+        f.write('\n')
+        f.write("Number of Samples Tested: "+str(numberSamples)+' = (TP+FN)')
+        f.write('\n\n')
+        f.write('TP =  '+str(TP)+', TARGET = '+str(numberSamples)+' FN =  '+str(FN)+', TARGET = 0'+' Accuracy = '+str(accuracy))
+        f.write('\n')
+        f.write('Stats Checking')
+        f.write('\n')
+        f.write('For Pos Cases (In Range ='+str(PosSucc)+' ) (Out of Range = '+str(PosFail)+')')
+        f.write('\n')
+        f.write('For Neg Cases (In Range =' + str(NegSucc) + ') (Out of Range = ' + str(NegFail)+ ')')
+        f.write('\n')
+        f.write('TPCase1 = '+str(TP1)+' TPCase2 = '+str(TP2)+' TPCase3 = '+str(TP3)+' TPCase4 = '+str(TP4)+' TPCase5 = '+str(TP5))
+        f.write('\n')
+        f.write('FNCase1 = '+str(FN1)+' FNCase2 = '+str(FN2)+' FNCase3 = '+str(FN3)+' FNCase4 = '+str(FN4)+' FNCase5 = '+str(FN5))
+        f.write('\n\n')
+
+    else:
+        print("*** Invalid File Handle For results File ***")
+        sys.exit()
+
+
+
+
+def  StoreNVSSTestSummaryResults(f,numberSamples,pulsarCount,agnCount,blazarCount,seyfertCount,quasarCount,unknownCount,numberPossibles):
+
+
+
+    if (f):
+        print("*** Storing NVSS Summary Results ....")
+        f.write('\n')
+        f.write("Number of Samples Tested: "+str(numberSamples))
+        f.write('\n')
+        f.write("Number of Classifications with Possibles : "+str(numberPossibles))
+        f.write('\n\n')
+        f.write('AGN Count =  '+str(agnCount))
+        f.write('\n')
+        f.write('PULSAR Count =  ' + str(pulsarCount))
+        f.write('\n')
+        f.write('BLAZAR Count =  ' + str(blazarCount))
+        f.write('\n')
+        f.write('QUASAR Count =  ' + str(quasarCount))
+        f.write('\n')
+        f.write('SEYFERT Count =  ' + str(seyfertCount))
+        f.write('\n')
+        f.write('UNKNOWN Count =  ' + str(unknownCount))
+        f.write('\n')
+
+        print("*** NVSS Summary Results Completed....")
+
+
+    else:
+        print("*** Invalid File Handle For NVSS Results File ***")
+        sys.exit()
+
 
 
 
@@ -2140,7 +2945,7 @@ def StoreModelResultsInFile(f,sourceNo,trueClass,modelClass,predictedLabel,proba
         sys.exit()
 
 
-def TestAllRandomSamples(dataSet,testModelList,dictList,scalerList,classList):
+def BlindTestAllSamples(dataSet,testModelList,dictList,scalerList,classList):
 
     agnTestData,agnSourceDetails = ProcessTransientData(dataSet, DEFAULT_AGN_CLASS,0)
     quasarTestData,quasarSourceDetails = ProcessTransientData(dataSet, DEFAULT_QUASAR_CLASS,0)
@@ -2149,7 +2954,7 @@ def TestAllRandomSamples(dataSet,testModelList,dictList,scalerList,classList):
     blazarTestData,blazarSourceDetails = ProcessTransientData(dataSet, DEFAULT_BLAZAR_CLASS,0)
 
 
-    finalBinaryModelDict, fullModelList, fullDictList, fullScalerList = ProcessFullBinaryModels()
+    finalBinaryModelDict, fullModelList, fullDictList, fullScalerList,fullEncoderList = LoadMultiClassModels(dataSet)
 
 
     fTestResults = OpenTestResultsFile()
@@ -2257,25 +3062,281 @@ def TestAllRandomSamples(dataSet,testModelList,dictList,scalerList,classList):
 
 
 
-def SoakTestModel(dataSet,model, labelList, scaler, labelDict):
-    totalNoCorrect = []
-    totalNoIncorrect = []
+def CalcIndStats(sampleData):
+    import statistics
 
-    for classNo in range(len(labelList)):
+    mean =statistics.mean(sampleData)
+    stdev = statistics.stdev(sampleData)
+    var = statistics.pvariance(sampleData)
 
-        dataSample,t1SourceDetails = ProcessTransientData(dataSet, labelList[classNo],0)
-        noCorrect, noIncorrect = SoakTestFullModel(dataSample, model, labelList[classNo],scaler,labelDict)
-        totalNoCorrect.append(noCorrect)
-        totalNoIncorrect.append(noIncorrect)
+    return mean,stdev,var
 
-    for classNo in range(len(labelList)):
 
-         print('*** For Soak Testing Class = '+labelList[classNo]+' NoCorrect = '+str(totalNoCorrect[classNo])+' , NoIncorrect = '+str(totalNoIncorrect[classNo])+' ***')
-         accuracy = totalNoCorrect[classNo]/(totalNoCorrect[classNo]+totalNoIncorrect[classNo])
-         print('*** Accuracy = '+str(accuracy)+' ***')
+def CalculateClassMean(classType,testData):
+    import statistics
+    meanEntry = []
 
-    sys.exit()
+    print("*** Calculating "+classType+" Mean ***")
+    for entry in range(len(testData)):
+        meanEntry.append(statistics.mean(testData[entry][0]))
 
+    return meanEntry
+
+
+
+def PredictClassBasedOnStats(mean,agnMean,agnStdev,quasarMean,quasarStdev,pulsarMean,pulsarStdev,seyfertMean,seyfertStdev,blazarMean,blazarStdev):
+
+    potentialClasses = []
+
+    print("mean = ",mean)
+    print("agn mean = ",agnMean)
+    print("agn std dev = ", agnStdev)
+    if (mean>= agnMean-agnStdev) and (mean <= agnMean+agnStdev):
+
+        potentialClasses.append(DEFAULT_AGN_CLASS)
+    if (mean >= quasarMean - quasarStdev) and (mean <= quasarMean + quasarStdev):
+
+        potentialClasses.append(DEFAULT_QUASAR_CLASS)
+    if (mean >= pulsarMean - pulsarStdev) and (mean <= pulsarMean + pulsarStdev):
+
+        potentialClasses.append(DEFAULT_PULSAR_CLASS)
+    if (mean >= seyfertMean - seyfertStdev) and (mean <= seyfertMean + seyfertStdev):
+
+        potentialClasses.append(DEFAULT_SEYFERT_CLASS)
+    if (mean >= blazarMean - blazarStdev) and (mean <= blazarMean + blazarStdev):
+
+        potentialClasses.append(DEFAULT_BLAZAR_CLASS)
+
+    return potentialClasses
+
+
+def StackImages(imageData):
+
+    numberImagesToStack = len(imageData)
+
+    stackedImage = imageData[0]
+    for image in range(1, len(imageData)):
+        stackedImage += imageData[image]
+
+    stackedImage = stackedImage / numberImagesToStack
+
+    mean, stddev, var = CalcIndStats(stackedImage[0])
+
+    return mean, stddev
+
+
+
+def GenerateListOfPairsToTest(listofClasses):
+
+    import itertools
+    import operator
+
+    processDict = {}
+    modelNumber = 0
+
+    if (len(listofClasses) >2):
+
+        entriesToProcess = list(itertools.product(listofClasses,listofClasses))
+
+        # now examine each entry and check that we have no duplicates
+
+
+        for entry in range(len(entriesToProcess)):
+            if not ((entriesToProcess[entry][0] == entriesToProcess[entry][1])):
+                firstClass = entriesToProcess[entry][0]
+                secondClass = entriesToProcess[entry][1]
+
+                combinedModel = firstClass[0]+secondClass[0]
+                otherModel = secondClass[0] + firstClass[0]
+
+                if not ((combinedModel in processDict) or (otherModel in processDict)):
+                    processDict[combinedModel] = modelNumber
+                    modelNumber +=1
+
+    elif (len(listofClasses) == 2):
+
+        firstClass = listofClasses[0]
+        secondClass = listofClasses[1]
+
+        combinedModel = firstClass[0] + secondClass[0]
+        otherModel = secondClass[0] + firstClass[0]
+
+        if not ((combinedModel in processDict) or (otherModel in processDict)):
+            processDict[combinedModel] = modelNumber
+
+
+    return processDict
+
+
+def FullTestAllSamplesOnStats(dataSet,testModelList,dictList,scalerList,classList):
+
+    meanDict = {}
+    stddevDict = {}
+
+    if (bBlindTestAllSamples) or (bBlindTestAGN):
+        agnTestData,agnSourceDetails = ProcessTransientData(dataSet, DEFAULT_AGN_CLASS,0)
+        meanDict[DEFAULT_AGN_CLASS], stddevDict[DEFAULT_AGN_CLASS] = StackImages(agnTestData)
+    if (bBlindTestAllSamples) or (bBlindTestQUASAR):
+        quasarTestData,quasarSourceDetails = ProcessTransientData(dataSet, DEFAULT_QUASAR_CLASS,0)
+        meanDict[DEFAULT_QUASAR_CLASS], stddevDict[DEFAULT_QUASAR_CLASS] = StackImages(quasarTestData)
+    if (bBlindTestAllSamples) or (bBlindTestPULSAR):
+        pulsarTestData,pulsarSourceDetails = ProcessTransientData(dataSet, DEFAULT_PULSAR_CLASS,0)
+        meanDict[DEFAULT_PULSAR_CLASS], stddevDict[DEFAULT_PULSAR_CLASS] = StackImages(pulsarTestData)
+    if (bBlindTestAllSamples) or (bBlindTestSEYFERT):
+        seyfertTestData,seyfertSourceDetails = ProcessTransientData(dataSet, DEFAULT_SEYFERT_CLASS,0)
+        meanDict[DEFAULT_SEYFERT_CLASS], stddevDict[DEFAULT_SEYFERT_CLASS] = StackImages(seyfertTestData)
+    if (bBlindTestAllSamples) or (bBlindTestBLAZAR):
+        blazarTestData,blazarSourceDetails = ProcessTransientData(dataSet, DEFAULT_BLAZAR_CLASS,0)
+        meanDict[DEFAULT_BLAZAR_CLASS], stddevDict[DEFAULT_BLAZAR_CLASS] = StackImages(blazarTestData)
+
+    finalBinaryModelDict, fullModelList, fullDictList, fullScalerList,fullEncoderList = LoadMultiClassModels(dataSet)
+
+    fTestResults = OpenTestResultsFile()
+    fSummaryResults = OpenBlindTestSummaryFile(dataSet)
+
+    for dictNo in range(len(dictList)):
+
+        labelList = list(dictList[dictNo].values())
+        print("Testing All Data Samples Of "+labelList[0]+ " Class")
+        if (labelList[0] == DEFAULT_AGN_CLASS):
+
+            fTestResults.write('\n')
+            fTestResults.write('\n')
+            fTestResults.write('*** TESTING AGN SAMPLES ***')
+            fTestResults.write('\n')
+            fTestResults.write('\n')
+
+            # now test test agn sample against agn stats
+            if (bBlindTestAllSamples) or (bBlindTestAGN):
+                TP, FN,StatsDict,TPDict = TestIndividualSampleSet(fTestResults,agnTestData,
+                                                    agnSourceDetails, dictNo, dictList, testModelList,DEFAULT_AGN_CLASS,
+                                                  scalerList,classList,finalBinaryModelDict, fullModelList, fullDictList, fullScalerList,meanDict,stddevDict)
+
+
+                StoreBlindTestSummaryResults(fSummaryResults,DEFAULT_AGN_CLASS,len(agnTestData), TP, FN, StatsDict,TPDict)
+
+
+        elif (labelList[0] == DEFAULT_BLAZAR_CLASS):
+
+            fTestResults.write('\n')
+            fTestResults.write('\n')
+            fTestResults.write('*** TESTING BLAZAR SAMPLES ***')
+            fTestResults.write('\n')
+            fTestResults.write('\n')
+
+            if (bBlindTestAllSamples) or (bBlindTestBLAZAR):
+                TP, FN,StatsDict,TPDict =TestIndividualSampleSet(fTestResults, blazarTestData, blazarSourceDetails, dictNo, dictList, testModelList,
+                                    DEFAULT_BLAZAR_CLASS,scalerList, classList, finalBinaryModelDict, fullModelList, fullDictList,fullScalerList,meanDict,stddevDict)
+
+                StoreBlindTestSummaryResults(fSummaryResults, DEFAULT_BLAZAR_CLASS, len(blazarTestData), TP, FN, StatsDict, TPDict)
+
+        elif (labelList[0] == DEFAULT_SEYFERT_CLASS):
+
+            fTestResults.write('\n')
+            fTestResults.write('\n')
+            fTestResults.write('*** TESTING SEYFERT SAMPLES ***')
+            fTestResults.write('\n')
+            fTestResults.write('\n')
+            if (bBlindTestAllSamples) or (bBlindTestSEYFERT):
+                    TP, FN,StatsDict,TPDict = TestIndividualSampleSet(fTestResults, seyfertTestData, seyfertSourceDetails, dictNo, dictList, testModelList,
+                                    DEFAULT_SEYFERT_CLASS, scalerList, classList, finalBinaryModelDict, fullModelList,
+                                    fullDictList,fullScalerList,meanDict,stddevDict)
+
+                    StoreBlindTestSummaryResults(fSummaryResults, DEFAULT_SEYFERT_CLASS, len(seyfertTestData), TP, FN, StatsDict,TPDict)
+
+
+
+        elif (labelList[0] == DEFAULT_QUASAR_CLASS):
+
+
+            fTestResults.write('\n')
+            fTestResults.write('\n')
+            fTestResults.write('*** TESTING QUASAR SAMPLES ***')
+            fTestResults.write('\n')
+            fTestResults.write('\n')
+            if (bBlindTestAllSamples) or (bBlindTestQUASAR):
+                TP, FN,StatsDict,TPDict = TestIndividualSampleSet(fTestResults, quasarTestData, quasarSourceDetails, dictNo, dictList, testModelList,
+                                    DEFAULT_QUASAR_CLASS, scalerList, classList, finalBinaryModelDict, fullModelList,
+                                    fullDictList, fullScalerList,meanDict,stddevDict)
+
+          
+                StoreBlindTestSummaryResults(fSummaryResults, DEFAULT_QUASAR_CLASS, len(quasarTestData), TP, FN, StatsDict, TPDict)
+
+
+
+        elif (labelList[0] == DEFAULT_PULSAR_CLASS):
+
+            fTestResults.write('\n')
+            fTestResults.write('\n')
+            fTestResults.write('*** TESTING PULSAR SAMPLES ***')
+            fTestResults.write('\n')
+            fTestResults.write('\n')
+            if (bBlindTestAllSamples) or (bBlindTestPULSAR):
+                TP, FN,StatsDict,TPDict = TestIndividualSampleSet(fTestResults, pulsarTestData, pulsarSourceDetails, dictNo, dictList, testModelList,
+                                    DEFAULT_PULSAR_CLASS, scalerList, classList, finalBinaryModelDict, fullModelList,
+                                    fullDictList, fullScalerList,meanDict,stddevDict)
+                StoreBlindTestSummaryResults(fSummaryResults, DEFAULT_PULSAR_CLASS, len(pulsarTestData), TP, FN, StatsDict,TPDict)
+
+
+        else:
+            print("*** Unknown Transient Class To Process ***")
+            sys.exit()
+
+    fTestResults.close()
+    fSummaryResults.close()
+
+
+def FullTestNVSSCatalog():
+
+
+    testModelList, dictList, scalerList, classList, encoderList = GetAllTestModels(DEFAULT_NVSS_DATASET, BINARY_OTHER_MODELS)
+
+    finalBinaryModelDict, fullModelList, fullDictList, fullScalerList, fullEncoderList = LoadMultiClassModels(DEFAULT_NVSS_DATASET)
+
+    fTestResults = OpenNVSSTestResultsFile()
+    fSummaryResults = OpenNVSSTestSummaryFile()
+
+    MAX_NUMBER_NVSS_TEST_IMAGES = 8568
+    numberSamples = 0
+    agnCount = 0
+    blazarCount = 0
+    quasarCount = 0
+    seyfertCount = 0
+    pulsarCount = 0
+    unknownCount =0
+    numberPossibles = 0
+    MIN_PROB_LIMIT = 0.6
+
+    for imageNo in range(MAX_NUMBER_NVSS_TEST_IMAGES):
+
+        bValidData,testData = loadNVSSCSVFile(imageNo)
+        if (bValidData):
+            transientClass,transientProb,possibleClass = ClassifyAnImage(testData, dictList, testModelList, scalerList, classList, finalBinaryModelDict, fullModelList,
+                                            fullDictList, fullScalerList)
+            numberSamples += 1
+            if (possibleClass != 0):
+                numberPossibles +=1
+            if (transientClass==DEFAULT_AGN_CLASS):
+                agnCount+=1
+            elif (transientClass==DEFAULT_BLAZAR_CLASS):
+                blazarCount+=1
+            elif (transientClass==DEFAULT_QUASAR_CLASS):
+                quasarCount+=1
+            elif (transientClass==DEFAULT_SEYFERT_CLASS):
+                seyfertCount+=1
+            elif (transientClass==DEFAULT_PULSAR_CLASS):
+                pulsarCount+=1
+            else:
+                unknownCount +=1
+
+            print("Transient Class = "+transientClass+", with Prob = "+str(round(transientProb,4)))
+            if (transientProb > MIN_PROB_LIMIT):
+                StoreNVSSTestResults(fTestResults, imageNo, transientClass,transientProb,possibleClass)
+
+
+    StoreNVSSTestSummaryResults(fSummaryResults, numberSamples, pulsarCount, agnCount, blazarCount, seyfertCount, quasarCount,unknownCount,numberPossibles)
+    fTestResults.close()
+    fSummaryResults.close()
 
 
 def TestRandomFITSFiles(numberFiles,model,XTest,ytest,labelDict):
@@ -2472,10 +3533,7 @@ def StackTrainingData(allTrainingData):
 
 
         stackedImage = stackedImage/numberImagesToStack
-
-
         stackedTransientImage.append(stackedImage)
-
 
     return stackedTransientImage
 
@@ -2486,7 +3544,7 @@ def SetPlotParameters():
     plt.rc('xtick', labelsize=SMALL_FONT_SIZE)
     plt.rc('ytick', labelsize=SMALL_FONT_SIZE)
 
-def DisplayStackedImages(stackedData,labelList):
+def DisplayStackedImages(stackedData,labelList,imageMean,imageStddev,imageVar):
 
     SetPlotParameters()
 
@@ -2499,12 +3557,14 @@ def DisplayStackedImages(stackedData,labelList):
     figx = 0
     figy = 0
 
+    DEFAULT_STATS_ROUNDING = 5
+
     for imageNo in range(0, len(stackedData)):
         imageData = stackedData[imageNo]
         x = np.arange(len(imageData[0]))
 
         axs[figx,figy].scatter(x, imageData[0], marker='+')
-        axs[figx,figy].set_title(labelList[imageNo])
+        axs[figx,figy].set_title(labelList[imageNo]+' mean = '+str(round(imageMean[imageNo],DEFAULT_STATS_ROUNDING))+' stddev = '+str(round(imageStddev[imageNo],DEFAULT_STATS_ROUNDING)))
         axs[figx,figy].scatter(x, imageData[0], marker='+')
         axs[figx,figy].tick_params(axis='x', labelsize=SMALL_FONT_SIZE)
 
@@ -2514,7 +3574,7 @@ def DisplayStackedImages(stackedData,labelList):
             figx += 1
             figy = 0
 
- #   plt.show()
+    plt.show()
 
     fig.savefig(DEFAULT_STACKED_FILENAME)
 
@@ -2605,7 +3665,7 @@ def CreateSetCSVFiles(dataSet):
         print("*** Processed " + str(totalNoFiles) + " BLAZAR FILES ")
 
 
-def CreateModelFileName(dataSet,labelList):
+def CreateModelFileName(modelLocation,dataSet,labelList):
 
 
     if (dataSet==DEFAULT_NVSS_DATASET):
@@ -2618,15 +3678,15 @@ def CreateModelFileName(dataSet,labelList):
     for labelNo in range(1, len(labelList)):
         filename = filename + '_' + labelList[labelNo][0]
 
-    fullFilename = DEFAULT_EXISTING_MODEL_LOCATION+ filename + MODEL_FILENAME_EXTENSION
+    fullFilename = modelLocation+ filename + MODEL_FILENAME_EXTENSION
 
     return filename,fullFilename
 
 
-def SaveLabelDict(fileName,labelDict):
+def SaveModelDict(modelLocation,fileName,labelDict):
     bSavedOK = False
 
-    filename = DEFAULT_EXISTING_MODEL_LOCATION+fileName+DEFAULT_DICT_TYPE
+    filename = modelLocation+fileName+DEFAULT_DICT_TYPE
 
     f = open(filename,'w')
     if (f):
@@ -2645,12 +3705,12 @@ def SaveLabelDict(fileName,labelDict):
 
     return bSavedOK
 
-def SaveModelScaler(fileName,scaler):
+def SaveModelScaler(modelLocation,fileName,scaler):
     import pickle
 
     bSavedOK = False
 
-    filename = DEFAULT_EXISTING_MODEL_LOCATION+fileName+DEFAULT_SCALER_TYPE
+    filename = modelLocation+fileName+DEFAULT_SCALER_TYPE
 
     f = open(filename,'wb')
     if (f):
@@ -2661,6 +3721,27 @@ def SaveModelScaler(fileName,scaler):
         f.close()
 
     return bSavedOK
+
+def SaveModelEncoder(modelLocation,fileName,encoder):
+
+    import pickle
+
+    bSavedOK = False
+
+    filename = modelLocation+fileName+DEFAULT_ENCODER_TYPE
+
+    f = open(filename,'wb')
+    if (f):
+        pickle.dump(encoder,f)
+        bSavedOK = True
+        print("***Saving Encoder...***")
+
+        f.close()
+
+    return bSavedOK
+
+
+
 
 def GetSavedDict(dictLocation,modelName):
     from os.path import splitext
@@ -2705,22 +3786,58 @@ def GetSavedScaler(scalerLocation,modelName):
 
     return scaler
 
+def GetSavedEncoder(encoderLocation,modelName):
+    from os.path import splitext
+    import pickle
 
 
-def SaveModel(dataSet,labelDict,model,scaler,labelList):
+    filename, ext = splitext(modelName)
+
+    filename = encoderLocation + filename + DEFAULT_ENCODER_TYPE
+
+    print("Retrieving encoder ...",filename)
+
+    with open(filename,'rb') as file:
+        encoder = pickle.load(file)
+
+    return encoder
+
+
+
+def SaveModel(modelLocation,dataSet,labelDict,model,scaler,labelList,encoder):
 
     import pickle
 
     print("*** Saving Model ***")
 
-    filename,fullFilename = CreateModelFileName(dataSet,labelList)
+    filename,fullFilename = CreateModelFileName(modelLocation,dataSet,labelList)
 
+    print("*** as ...."+fullFilename+" ***")
     with open(fullFilename,'wb')as file:
         pickle.dump(model,file)
 
-    SaveLabelDict(filename,labelDict)
+    SaveModelDict(modelLocation,filename,labelDict)
 
-    SaveModelScaler(filename,scaler)
+    SaveModelScaler(modelLocation,filename,scaler)
+
+    SaveModelEncoder(modelLocation, filename, encoder)
+
+def SaveCNNModel(modelLocation,dataSet,labelDict,model,scaler,labelList,encoder):
+
+    print("*** Saving CNN Model ***")
+
+    filename,fullFilename = CreateModelFileName(modelLocation,dataSet,labelList)
+
+    print("*** as ...."+fullFilename+" ***")
+
+    model.save(modelLocation)
+
+    SaveModelDict(modelLocation,filename,labelDict)
+
+    SaveModelScaler(modelLocation,filename,scaler)
+
+    SaveModelEncoder(modelLocation, filename, encoder)
+
 
 
 def GetExistingModels():
@@ -2728,6 +3845,7 @@ def GetExistingModels():
 
     modelList = []
 
+    print("*** Scanning Models In "+DEFAULT_EXISTING_MODEL_LOCATION+" ***")
     fileList = os.scandir(DEFAULT_EXISTING_MODEL_LOCATION)
     for entry in fileList:
        if entry.is_file():
@@ -2749,6 +3867,18 @@ def GetSavedModel(modelLocation,modelFilename):
         pickleModel = pickle.load(file)
 
     return pickleModel
+
+def GetSavedCNNModel(modelLocation,modelFilename):
+    from tensorflow import keras
+
+    filename = modelLocation+modelFilename
+    print("Retrieving CNN Model...",filename)
+
+    model = keras.models.load_model(filename)
+
+
+    return model
+
 
 def SelectExistingModel():
     import pickle
@@ -2773,9 +3903,25 @@ def SelectExistingModel():
 
     modelName = modelList[modelNumber - 1]
 
-    labelDict = GetSavedDict(DEFAULT_EXISTING_MODEL_LOCATION,modelName)
+    bdictOK,labelDict = GetSavedDict(DEFAULT_EXISTING_MODEL_LOCATION,modelName)
 
     scaler = GetSavedScaler(DEFAULT_EXISTING_MODEL_LOCATION,modelName)
+
+    encoder = GetSavedEncoder(DEFAULT_EXISTING_MODEL_LOCATION,modelName)
+
+    if (AGN_DATA_SELECTED in modelName):
+        classToTest = DEFAULT_AGN_CLASS
+    elif (SEYFERT_DATA_SELECTED in modelName):
+        classToTest = DEFAULT_SEYFERT_CLASS
+    elif (BLAZAR_DATA_SELECTED in modelName):
+        classToTest = DEFAULT_BLAZAR_CLASS
+    elif (PULSAR_DATA_SELECTED in modelName):
+        classToTest = DEFAULT_PULSAR_CLASS
+    elif (QUASAR_DATA_SELECTED in modelName):
+        classToTest = DEFAULT_QUASAR_CLASS
+    else:
+        print("*** UNKNOWN CLASS ***")
+        sys.exit()
 
     if (modelName[0] == VAST_SHORT_NAME):
         dataSet = DEFAULT_VAST_DATASET
@@ -2787,80 +3933,60 @@ def SelectExistingModel():
 
     pickleModel = GetSavedModel(DEFAULT_EXISTING_MODEL_LOCATION,modelName)
 
-    return pickleModel,labelDict,scaler,dataSet
+    return pickleModel,labelDict,scaler,dataSet,classToTest,encoder
 
 
-def GetAllTestModels(dataset):
-
-    import pickle
-
-    testModelList = []
-    dictList = []
-    scalerList = []
-
-    if (dataset == DEFAULT_VAST_DATASET):
-        modelList = [DEFAULT_TEST_V_A_O,DEFAULT_TEST_V_Q_O,DEFAULT_TEST_V_P_O,DEFAULT_TEST_V_S_O, DEFAULT_TEST_V_B_O ]
-        classList = [DEFAULT_AGN_CLASS,DEFAULT_QUASAR_CLASS,DEFAULT_PULSAR_CLASS,DEFAULT_SEYFERT_CLASS,DEFAULT_BLAZAR_CLASS,DEFAULT_OTHER_CLASS]
-    else:
-        print("Testing For NVSS Not Supported Yet")
-        sys.exit()
-
-    for testModel in modelList:
-
-        modelName = testModel+MODEL_FILENAME_EXTENSION
-
-  #      testModelList.append(GetSavedModel(DEFAULT_EXISTING_MODEL_LOCATION,modelName))
-        testModelList.append(GetSavedModel(DEFAULT_EXISTING_SOAK_TEST_LOCATION, modelName))
-
-   #     bDictOK,dict = GetSavedDict(DEFAULT_EXISTING_MODEL_LOCATION,modelName)
-        bDictOK, dict = GetSavedDict(DEFAULT_EXISTING_SOAK_TEST_LOCATION, modelName)
-        if (bDictOK):
-            dictList.append(dict)
-    #    scalerList.append(GetSavedScaler(DEFAULT_EXISTING_MODEL_LOCATION,modelName))
-        scalerList.append(GetSavedScaler(DEFAULT_EXISTING_SOAK_TEST_LOCATION, modelName))
-
-    return testModelList,dictList,scalerList,classList
-
-def GetFullBinaryModels(dataset):
+def GetAllTestModels(dataset,modelType):
 
     import pickle
 
     testModelList = []
     dictList = []
     scalerList = []
+    encoderList = []
 
+    classList = [DEFAULT_AGN_CLASS,DEFAULT_QUASAR_CLASS,DEFAULT_PULSAR_CLASS,DEFAULT_SEYFERT_CLASS,DEFAULT_BLAZAR_CLASS,DEFAULT_OTHER_CLASS]
     if (dataset == DEFAULT_VAST_DATASET):
-        modelList = [DEFAULT_TEST_V_A_O,DEFAULT_TEST_V_Q_O,DEFAULT_TEST_V_P_O,DEFAULT_TEST_V_S_O, DEFAULT_TEST_V_B_O ]
-        classList = [DEFAULT_AGN_CLASS,DEFAULT_QUASAR_CLASS,DEFAULT_PULSAR_CLASS,DEFAULT_SEYFERT_CLASS,DEFAULT_BLAZAR_CLASS,DEFAULT_OTHER_CLASS]
-    else:
-        print("Testing For NVSS Not Supported Yet")
-        sys.exit()
+        modelList = [DEFAULT_TEST_V_A_O, DEFAULT_TEST_V_Q_O, DEFAULT_TEST_V_P_O, DEFAULT_TEST_V_S_O, DEFAULT_TEST_V_B_O]
+        if (modelType== BINARY_OTHER_MODELS):
+            modelLocation = VAST_OTHER_BINARY_MODELS_LOCATION
+        elif (modelType== BINARY_FULL_MODELS):
+            modelLocation = VAST_FULL_BINARY_MODELS_LOCATION
+        else:
+            print("*** UNKNOWN Model Type To Extract ***")
+            sys.exit()
+
+    elif (dataset == DEFAULT_NVSS_DATASET):
+        modelList = [DEFAULT_TEST_N_A_O, DEFAULT_TEST_N_Q_O, DEFAULT_TEST_N_P_O, DEFAULT_TEST_N_S_O, DEFAULT_TEST_N_B_O]
+        if (modelType == BINARY_OTHER_MODELS):
+            modelLocation = NVSS_OTHER_BINARY_MODELS_LOCATION
+        elif (modelType == BINARY_FULL_MODELS):
+            modelLocation = NVSS_FULL_BINARY_MODELS_LOCATION
+        else:
+            print("*** UNKNOWN Model Type to Extract ***")
+            sys.exit()
+
+    print("Extracting Models From "+modelLocation+" ***")
 
     for testModel in modelList:
 
         modelName = testModel+MODEL_FILENAME_EXTENSION
 
-        testModelList.append(GetSavedModel(DEFAULT_EXISTING_MODEL_LOCATION,modelName))
-
-        bDictOK,dict = GetSavedDict(DEFAULT_EXISTING_MODEL_LOCATION,modelName)
+        testModelList.append(GetSavedModel(modelLocation, modelName))
+        bDictOK, dict = GetSavedDict(modelLocation, modelName)
         if (bDictOK):
             dictList.append(dict)
-        scalerList.append(GetSavedScaler(DEFAULT_EXISTING_MODEL_LOCATION,modelName))
+        scalerList.append(GetSavedScaler(modelLocation, modelName))
+        encoderList.append(GetSavedEncoder(modelLocation, modelName))
 
+    return testModelList,dictList,scalerList,classList,encoderList
 
-    return testModelList,dictList,scalerList,classList
+def TestRetrievedModel(XTest,ytest,model,encoder):
 
-
-
-
-
-
-def TestRetrievedModel(XTest,ytest,model):
 
     score = model.score(XTest,ytest)
-
     print("Test Score (Retrieved Model): {0:.2f} %".format(100*score))
-
+    sys.exit()
 
 def AccessNVSSData():
 
@@ -2930,8 +4056,6 @@ def CheckFITSIntegrity(sourceLocation,sourceList):
 
     imageLocation, imageList = ScanForImages(sourceLocation, source)
 
-    print("image location = ",imageLocation)
-    print("image  list = ",imageList)
 
     randomImage1  = int(random.random() * len(imageList))
     randomImage2 = int(random.random() * len(imageList))
@@ -3367,7 +4491,7 @@ def ProcessAstroqueryTransient(startSelection,catalogName,transientName,OutputSo
 def BuildandTestCNNModel(primaryLabel,completeTrainingData,trainingDataSizes):
 
 
-    XTrain, XTest, ytrain, ytest, labelDict,scaler,labelList = CreateTrainingAndTestData(True, primaryLabel[0],
+    XTrain, XTest, ytrain, ytest, labelDict,scaler,labelList,encoderList = CreateTrainingAndTestData(True, primaryLabel[0],
                                                                                        completeTrainingData,
                                                                                        trainingDataSizes)
 
@@ -3380,7 +4504,7 @@ def BuildandTestCNNModel(primaryLabel,completeTrainingData,trainingDataSizes):
 
     if (bOptimiseHyperParameters == True):
 
-        fOptimisationFile = OpenOptimsationFile()
+        fOptimisationFile = OpenOptimisationFile()
 
         if (fOptimisationFile):
             print("*** Optimising CNN Hyper Parameters ***")
@@ -3404,7 +4528,7 @@ def BuildandTestCNNModel(primaryLabel,completeTrainingData,trainingDataSizes):
 
     print("Final CNN Accuracy = ", Accuracy)
 
-    return CNNModel
+    return CNNModel,labelDict,scaler,labelList,encoderList
 
 
 def ProcessNVSSCatalog():
@@ -3550,9 +4674,9 @@ def StoreNVSSDetections(f,source,ra,dec,label):
 
 
 
-def TestNVSSCatalog(model,labelDict,startEntry):
+def TestNVSSCatalog(startEntry):
 
-    print("Testing from NVSS Catalog....")
+    print("Extracting and Storing Samples From NVSS Catalog....")
     totalNoSources = 0
     entry =0
     fIn = open(FINAL_NVSS_CATALOG_FILE)
@@ -3592,18 +4716,18 @@ def TestNVSSCatalog(model,labelDict,startEntry):
                                         dataframe = pd.read_csv(csvFilename, header=None)
                                         dataValues = dataframe.values
                                         sourceData = np.reshape(dataValues, (1, XSIZE_FITS_IMAGE * YSIZE_FITS_IMAGE))
-                                        if (bScaleInputs):
-                                            dataAsArray = ScaleInputData(sourceData)
+                                #        if (bScaleInputs):
+                                #            dataAsArray = ScaleInputData(sourceData)
 
-                                        ypredict = model.predict(dataAsArray)
-                                        print("ypredict = ",ypredict)
+                                 #       ypredict = model.predict(dataAsArray)
+                                 #       print("ypredict = ",ypredict)
 
-                                        bDetection,predictedLabel = DecodePredictedLabel(labelDict, ypredict)
-                                        if (bDetection):
-                                            StoreNVSSDetections(fDetect, source, ra,dec,predictedLabel)
-                                            totalNoSources += 1
-                                            if (totalNoSources >= MAX_NVSS_TO_PROCESS):
-                                                bComplete = True
+                                  #      bDetection,predictedLabel = DecodePredictedLabel(labelDict, ypredict)
+                                  #      if (bDetection):
+                                  #          StoreNVSSDetections(fDetect, source, ra,dec,predictedLabel)
+                                        totalNoSources += 1
+                                        if (totalNoSources >= MAX_NVSS_TO_PROCESS):
+                                            bComplete = True
 
 
     fIn.close()
@@ -3707,8 +4831,32 @@ def StoreRandomImages(primaryLabel,randomTrainingData) :
             StoreImageContents(f, randomTrainingData[imageNo])
         f.close()
 
-def ProcessFullModelData(dataSet,labelList):
 
+def EqualiseAllDataSamples(completeTrainingData,trainingDataSizes):
+
+    reducedTrainingData = []
+
+    maxSampleSize = max(trainingDataSizes)
+    minSampleSize = min(trainingDataSizes)
+
+    print("max = ",maxSampleSize)
+    print("min = ",minSampleSize)
+
+
+    # now make all data samples the same size
+
+    for sample in range(len(completeTrainingData)):
+        trainingData = completeTrainingData[sample]
+        if (trainingDataSizes[sample] > minSampleSize):
+            del trainingData[minSampleSize:trainingDataSizes[sample]]
+            trainingDataSizes[sample] = minSampleSize
+  #      reducedTrainingData.append(trainingData)
+
+  #  return reducedTrainingData, trainingDataSize
+    return completeTrainingData, trainingDataSizes
+
+
+def ProcessAllTransientModelData(dataSet,labelList,bEqualise):
 
     completeTrainingData = []
     trainingDataSizes = []
@@ -3718,12 +4866,15 @@ def ProcessFullModelData(dataSet,labelList):
     for classes in range(len(labelList)):
 
 
-        trainingData,sourceDetails = ProcessTransientData(dataSet, labelList[classes],MAX_NUMBER_DATA_SAMPLES)
+    #    trainingData,sourceDetails = ProcessTransientData(dataSet, labelList[classes],MAX_NUMBER_DATA_SAMPLES)
+        trainingData,sourceDetails = ProcessTransientData(dataSet, labelList[classes],0)
 
         trainingDataSizes.append(len(trainingData))
         completeTrainingData.append(trainingData)
 
-    print("training data sizes = ",trainingDataSizes)
+    if (bEqualise):
+        completeTrainingData,trainingDataSizes = EqualiseAllDataSamples(completeTrainingData,trainingDataSizes)
+
     return completeTrainingData,trainingDataSizes
 
 
@@ -3738,7 +4889,7 @@ def ProcessBinaryModelData(dataSet,primaryLabel,otherLabels):
 
     trainingData, sourceDetails = ProcessTransientData(dataSet, primaryLabel[0], 0)
 
-    maxNumberSamples = int(len(trainingData) / 4)
+    maxNumberSamples = int(len(trainingData) / (DEFAULT_NUMBER_MODELS-1))
 
     trainingDataSizes.append(len(trainingData))
     completeTrainingData.append(trainingData)
@@ -3761,7 +4912,42 @@ def ProcessBinaryModelData(dataSet,primaryLabel,otherLabels):
 
     return completeTrainingData,trainingDataSizes
 
-def GetSelectedFullDataSets():
+def ProcessSingleModelData(dataSet,primaryLabel,scaler,labelDict,encoder):
+    testLabels = []
+
+    print("*** Loading Primary Training Data For Single Model ***")
+
+    testData, sourceDetails = ProcessTransientData(dataSet, primaryLabel, 0)
+    testData = TransformTrainingData(testData)
+
+    scaledData = scaler.transform(testData)
+
+    OHELabels,lDict,labelList,OHE = createLabels(primaryLabel)
+
+    index = labelList.index(primaryLabel)
+
+    testLabels = assignLabelSet(OHELabels[index], len(scaledData))
+
+    return scaledData,testLabels
+
+
+def GetEqualisationStrategy():
+
+    bCorrectInput = False
+
+    while (bCorrectInput == False):
+        equaLise = input('Equalise All Data Samples (Y/N) :')
+        equaLise = equaLise.upper()
+        if (equaLise == 'Y'):
+            bEqualise = True
+            bCorrectInput = True
+        elif (equaLise == 'N'):
+            bEqualise = False
+            bCorrectInput = True
+
+    return bEqualise
+
+def GetSelectedMultiDataSets():
 
     classLabels= []
     bCorrectInput=False
@@ -3837,13 +5023,21 @@ def GetSelectedFullDataSets():
     return dataClass,classLabels
 
 
-
-
 def main():
 
     bTestRandomForestModel=False
     bTestCNNModel = False
     bTestSVMModel = False
+
+    if (bTestNVSSFiles):
+        TestNVSSFiles(model, labelDict)
+
+    if (bTestNVSSCatalog):
+        TestNVSSCatalog(7527)
+
+    if (bFullTestNVSSCatalog):
+        FullTestNVSSCatalog()
+
 
     if (bDataCreation):
         CreateData()
@@ -3873,22 +5067,26 @@ def main():
 
         if (selectedOperation == OP_TEST_MODEL):
 
-            model, labelDict, scaler, dataSet = SelectExistingModel()
+            model, labelDict, scaler, dataSet,primaryLabel,encoder = SelectExistingModel()
+            primaryLabel = ChooseDataSetsToTest()
 
-            if (bTestNVSSFiles):
-                TestNVSSFiles(model, labelDict)
-            if (bTestNVSSCatalog):
-                TestNVSSCatalog(model, labelDict, 2549)
+            testData,testLabels = ProcessSingleModelData(dataSet, primaryLabel,scaler,labelDict,encoder)
 
-        elif (selectedOperation == OP_TEST_SOAK):
+            TestRetrievedModel(testData,testLabels, model,encoder)
 
-            print("*** Selected Soak Testing***")
+            sys.exit()
+
+        elif (selectedOperation == OP_TEST_BLIND):
+
+            print("*** Selected Blind Testing***")
 
             dataSet = SelectDataset()
 
-            testModelList, dictList, scalerList, classList = GetAllTestModels(dataSet)
+            testModelList, dictList, scalerList, classList,encoderList = GetAllTestModels(dataSet, BINARY_OTHER_MODELS)
 
-            TestAllRandomSamples(dataSet, testModelList, dictList, scalerList, classList)
+         #   BlindTestAllSamples(dataSet, testModelList, dictList, scalerList, classList)
+            FullTestAllSamplesOnStats(dataSet, testModelList, dictList, scalerList, classList)
+
 
             sys.exit()
 
@@ -3905,13 +5103,14 @@ def main():
             else:
                 bTestCNNModel = True
 
-            dataSet,labelList = GetSelectedFullDataSets()
+            dataSet,labelList = GetSelectedMultiDataSets()
+            bEqualise = GetEqualisationStrategy()
 
-            completeTrainingData, trainingDataSizes = ProcessFullModelData(dataSet,labelList)
+            completeTrainingData, trainingDataSizes = ProcessAllTransientModelData(dataSet,labelList,bEqualise)
 
             print("*** Creating Training and Test Data Sets ***")
 
-            XTrain, XTest, ytrain, ytest, labelDict, scaler, labelList = CreateFullTrainingAndTestData(
+            XTrain, XTest, ytrain, ytest, labelDict, scaler, labelList,encoder = CreateFullTrainingAndTestData(
                 False,labelList, completeTrainingData, trainingDataSizes)
 
 
@@ -3935,26 +5134,10 @@ def main():
 
             print("*** Creating Training and Test Data Sets ***")
 
-            XTrain, XTest, ytrain, ytest, labelDict, scaler, labelList = CreateTrainingAndTestData(
+            XTrain, XTest, ytrain, ytest, labelDict, scaler, labelList, encoder = CreateTrainingAndTestData(
                 False, primaryLabel[0], completeTrainingData, trainingDataSizes)
 
-            # completeTrainingData contains 2 samples for primary and other
-
-
-        if (bStackImages):
-            stackedImages = StackTrainingData(completeTrainingData)
-
-            print("no of stacked images = ",len(stackedImages))
-            DisplayStackedImages(stackedImages, labelList)
-
-
-        if (bTestClassicModels):
-
-            print("*** Evaluating Multiple Classic Models ***")
-
-            MultipleClassicModels(XTrain, ytrain, XTest, ytest)
-
-        elif (bTestRandomForestModel):
+        if (bTestRandomForestModel):
 
             if (bCheckTrainingAndTestSet):
                 CheckTrainingAndTestSet(XTrain, XTest)
@@ -3965,14 +5148,8 @@ def main():
 
             newModel = RandomForestModel(XTrain, ytrain, XTest, ytest)
 
-            if (bSoakTestModel):
-                SoakTestModel(dataSet,newModel,labelList,scaler,labelDict)
-
-            if (bTestFITSFile):
-                TestRandomFITSFiles(10, newModel, XTest, ytest,labelDict)
-
             if (bSaveModel):
-                SaveModel(dataSet, labelDict, newModel, scaler, labelList)
+                SaveModel(DEFAULT_EXISTING_MODEL_LOCATION,dataSet, labelDict, newModel, scaler, labelList,encoder)
 
             sys.exit()
 
@@ -3984,17 +5161,10 @@ def main():
 
         elif (bTestCNNModel):
 
-            XTrain, XTest, ytrain, ytest, labelDict,scaler,labelList = CreateTrainingAndTestData(
-                        True, primaryLabel[0], completeTrainingData, trainingDataSizes)
+            newModel,labelDict, scaler, labelList, encoder = BuildandTestCNNModel(primaryLabel, completeTrainingData, trainingDataSizes)
 
-            newModel = BuildandTestCNNModel(primaryLabel, completeTrainingData, trainingDataSizes)
-
-
-
-        if (bSaveModel):
-                SaveModel(dataSet,labelDict,newModel,scaler,labelList)
-
-
+            if (bSaveModel):
+                SaveCNNModel(DEFAULT_EXISTING_MODEL_LOCATION, dataSet, labelDict, newModel, scaler, labelList, encoder)
 
         else:
 
